@@ -83,6 +83,21 @@
         transform: translateY(0);
       }
     }
+
+    /* Ensure presentation media fits cleanly inside viewport and fullscreen */
+    #present-dashboard:fullscreen {
+      background-color: #FAF8F4;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    #present-dashboard:fullscreen #present-card-content {
+      padding: 1.25rem 2rem;
+    }
+
+    #present-dashboard:fullscreen .present-media-frame {
+      max-height: 54vh;
+    }
   </style>
 </head>
 
@@ -240,10 +255,10 @@
     </header>
 
     <!-- ==================== DASHBOARD A: STUDENT PRESENTATION VIEW ==================== -->
-    <main id="present-dashboard" class="flex-1 flex flex-col lg:flex-row overflow-hidden">
+    <main id="present-dashboard" class="flex-1 flex flex-col lg:flex-row overflow-hidden h-[calc(100vh-4rem)]">
       <!-- Collapsible Slide Index Drawer -->
       <aside id="present-sidebar"
-        class="w-full lg:w-72 bg-white border-b lg:border-b-0 lg:border-r border-[#E5E0D5] flex flex-col max-h-64 lg:max-h-[calc(100vh-4rem)] shrink-0">
+        class="w-full lg:w-72 bg-white border-b lg:border-b-0 lg:border-r border-[#E5E0D5] flex flex-col max-h-64 lg:max-h-full shrink-0">
         <div class="p-3.5 border-b border-[#E5E0D5] flex items-center justify-between gap-2">
           <span class="text-xs font-bold uppercase tracking-wider text-[#5C6B66]">Lesson Outline</span>
           <span id="present-count-badge"
@@ -257,10 +272,10 @@
       </aside>
 
       <!-- Main Stage -->
-      <div class="flex-1 flex flex-col bg-[#FAF8F4] min-w-0">
+      <div class="flex-1 flex flex-col bg-[#FAF8F4] min-w-0 h-full overflow-hidden">
         <!-- Presentation Controls Bar -->
         <div
-          class="px-4 sm:px-8 py-3 bg-white/70 border-b border-[#E5E0D5] flex flex-wrap items-center justify-between gap-3">
+          class="px-4 sm:px-8 py-2.5 bg-white/70 border-b border-[#E5E0D5] flex flex-wrap items-center justify-between gap-3 shrink-0">
           <div class="flex items-center gap-2">
             <button id="toggle-sidebar-btn" type="button" title="Toggle Outline"
               class="p-2 rounded-lg border border-[#E5E0D5] bg-white hover:bg-[#F3EFE6] text-[#0F3D2E] transition">
@@ -291,19 +306,19 @@
           </div>
         </div>
 
-        <!-- Slide Viewport -->
+        <!-- Slide Viewport (justify-start + my-auto on card prevents bottom/top clipping!) -->
         <div id="present-stage-wrap"
-          class="flex-1 overflow-y-auto p-4 sm:p-8 lg:p-10 flex flex-col items-center justify-center">
+          class="flex-1 overflow-y-auto p-3 sm:p-6 lg:p-8 flex flex-col items-center justify-start">
           <div id="present-card"
-            class="w-full max-w-5xl bg-white rounded-3xl shadow-xl shadow-[#0F3D2E]/5 border border-[#E5E0D5] overflow-hidden slide-enter">
+            class="w-full max-w-5xl my-auto bg-white rounded-3xl shadow-xl shadow-[#0F3D2E]/5 border border-[#E5E0D5] overflow-hidden slide-enter">
             <!-- Top Accent Strip -->
             <div class="h-2 bg-gradient-to-r from-[#0F3D2E] via-[#B8924A] to-[#0F3D2E]"></div>
-            <div id="present-card-content" class="p-6 sm:p-10 lg:p-12"></div>
+            <div id="present-card-content" class="p-5 sm:p-8 lg:p-10"></div>
           </div>
 
           <!-- Collapsible Teacher Notes -->
           <div id="present-notes-panel"
-            class="hidden w-full max-w-5xl mt-4 bg-[#F7F1E3] border border-[#B8924A]/30 rounded-2xl p-4 sm:p-5">
+            class="hidden w-full max-w-5xl mt-4 bg-[#F7F1E3] border border-[#B8924A]/30 rounded-2xl p-4 sm:p-5 shrink-0">
             <div class="flex items-center justify-between mb-1.5">
               <span class="text-xs font-bold uppercase tracking-wider text-[#8C6A2B]">Teacher Notes (Hidden from
                 Fullscreen)</span>
@@ -313,7 +328,7 @@
         </div>
 
         <!-- Bottom Slide Navigation Bar -->
-        <div class="px-4 sm:px-8 py-3.5 bg-white border-t border-[#E5E0D5] flex items-center justify-between gap-4">
+        <div class="px-4 sm:px-8 py-3 bg-white border-t border-[#E5E0D5] flex items-center justify-between gap-4 shrink-0">
           <button id="prev-slide-btn" type="button"
             class="px-4 py-2 rounded-xl border border-[#D8D2C5] hover:bg-[#F3EFE6] disabled:opacity-40 disabled:pointer-events-none text-sm font-semibold text-[#0F3D2E] transition flex items-center gap-1.5">
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -471,7 +486,7 @@
             <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#F0ECE1] pb-3">
               <div>
                 <h2 class="text-base font-bold text-[#0F3D2E]">Photos &amp; Videos for This Slide</h2>
-                <p class="text-xs text-[#5C6B66]">Upload photos/videos directly from your device or attach a media URL.
+                <p class="text-xs text-[#5C6B66]">Select videos from your Git <code class="px-1 py-0.5 rounded bg-[#F3EFE6] text-[#0F3D2E]">videos/</code> folder, upload from device, or attach a URL.
                 </p>
               </div>
               <div class="flex flex-wrap gap-2">
@@ -496,6 +511,30 @@
               </div>
             </div>
 
+            <!-- Select directly from GitHub videos/ folder -->
+            <div class="bg-[#E9F2EE]/60 p-4 rounded-xl border border-[#0F3D2E]/15 space-y-2.5">
+              <div class="flex flex-wrap items-center justify-between gap-2">
+                <div class="flex items-center gap-2">
+                  <span class="text-xs font-bold uppercase tracking-wider text-[#0F3D2E]">Select from Git <code class="lowercase">videos/</code> Folder</span>
+                  <span id="git-videos-status" class="text-[11px] text-[#5C6B66]"></span>
+                </div>
+                <button id="refresh-git-videos-btn" type="button"
+                  class="px-2.5 py-1 rounded-lg bg-white border border-[#D8D2C5] hover:border-[#0F3D2E] text-[11px] font-semibold text-[#0F3D2E] transition flex items-center gap-1">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                  <span>Refresh List</span>
+                </button>
+              </div>
+              <div class="flex flex-col sm:flex-row gap-2">
+                <select id="git-video-select"
+                  class="flex-1 px-3 py-2 rounded-lg border border-[#D8D2C5] text-xs font-semibold bg-white focus:outline-none focus:ring-2 focus:ring-[#0F3D2E]">
+                </select>
+                <input id="git-video-caption" type="text" placeholder="Caption (optional)"
+                  class="sm:w-44 px-3 py-2 rounded-lg border border-[#D8D2C5] text-xs bg-white focus:outline-none focus:ring-2 focus:ring-[#0F3D2E]" />
+                <button id="add-git-video-btn" type="button"
+                  class="px-4 py-2 rounded-lg bg-[#0F3D2E] hover:bg-[#165B44] text-white text-xs font-semibold transition">Add Selected</button>
+              </div>
+            </div>
+
             <!-- Add Media by URL -->
             <div class="flex flex-col sm:flex-row gap-2 bg-[#FAF8F4] p-3 rounded-xl border border-[#E5E0D5]">
               <select id="url-media-type"
@@ -512,7 +551,7 @@
                 URL</button>
             </div>
 
-            <!-- Media Grid -->
+            <!-- Media Grid (with inline Change Video selector on every card!) -->
             <div id="ed-media-list" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
           </div>
         </div>
@@ -522,6 +561,66 @@
   </div>
 
   <script>
+    // ==================== GIT VIDEOS FOLDER CONFIG ====================
+    const GITHUB_REPO = 'makeitdigitalwyd-sudo/Mayyath';
+    const GITHUB_VIDEOS_PATH = 'videos';
+    const FALLBACK_GIT_FILES = [
+      'videos/slide-4.mp4',
+      'videos/slide-5.mp4',
+      'videos/slide11.mp4',
+      'videos/slide-12.mp4',
+      'videos/slide-18.mp4',
+      'videos/slide-19.mp4',
+      'videos/slide-20.mp4',
+      'videos/slide-21.mp4',
+      'videos/slide-33.mp4'
+    ];
+    let gitMediaFiles = [...FALLBACK_GIT_FILES];
+
+    async function fetchGitMediaList(showFeedback = false) {
+      const statusEl = document.getElementById('git-videos-status');
+      if (statusEl) statusEl.textContent = 'Syncing...';
+      try {
+        const res = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/contents/${GITHUB_VIDEOS_PATH}`);
+        if (!res.ok) throw new Error('GitHub API unavailable');
+        const items = await res.json();
+        if (Array.isArray(items)) {
+          const files = items
+            .filter(item => item.type === 'file' && /\.(mp4|webm|mov|m4v|jpg|jpeg|png|webp)$/i.test(item.name))
+            .map(item => `${GITHUB_VIDEOS_PATH}/${item.name}`)
+            .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
+          if (files.length > 0) {
+            gitMediaFiles = files;
+          }
+          if (statusEl) statusEl.textContent = `(${gitMediaFiles.length} files synced)`;
+          if (showFeedback) showToast(`Synced ${gitMediaFiles.length} files from Git videos/`);
+        }
+      } catch (e) {
+        if (statusEl) statusEl.textContent = `(${gitMediaFiles.length} files cached)`;
+        if (showFeedback) showToast('Using cached Git videos list', 'error');
+      }
+      populateGitSelectDropdown();
+      if (activeDashboard === 'edit') renderMediaEditor();
+    }
+
+    function populateGitSelectDropdown() {
+      const sel = document.getElementById('git-video-select');
+      if (!sel) return;
+      const currentVal = sel.value;
+      sel.innerHTML = '';
+      gitMediaFiles.forEach(path => {
+        const opt = document.createElement('option');
+        opt.value = path;
+        opt.textContent = path;
+        sel.appendChild(opt);
+      });
+      if (currentVal && gitMediaFiles.includes(currentVal)) sel.value = currentVal;
+    }
+
+    function isImagePath(path) {
+      return /\.(jpg|jpeg|png|webp|gif)$/i.test(path || '');
+    }
+
     // ==================== DEFAULT SLIDES FROM USER'S PPT VIDEO ====================
     const DEFAULT_SLIDES = [
       {
@@ -610,7 +709,7 @@
           'കൂടുതൽ ഉചിതമായ രണ്ടാമത്തെ രൂപം'
         ],
         notes: '',
-        media: [{ id: 'm_slot_6', type: 'video', url: 'videos/slide-6.mp4', caption: 'രൂപം-2 (നല്ലത്) — ഫോട്ടോ/വീഡിയോ ചേർക്കുക' }]
+        media: [{ id: 'm_slot_6', type: 'placeholder', caption: 'രൂപം-2 (നല്ലത്) — ഫോട്ടോ/വീഡിയോ ചേർക്കുക' }]
       },
       {
         id: 's7',
@@ -622,7 +721,7 @@
           'കൈകാലുകളുടെ സന്ധികൾ മടക്കി നിവർത്തി മയപ്പെടുത്തി വെക്കുക'
         ],
         notes: '',
-        media: [{ id: 'm_slot_7', type: 'video', url: 'videos/slide-7.mp4', caption: 'കെണിപ്പുകൾ മയപ്പെടുത്തുന്ന പ്രായോഗിക ദൃശ്യം ചേർക്കുക' }]
+        media: [{ id: 'm_slot_7', type: 'placeholder', caption: 'കെണിപ്പുകൾ മയപ്പെടുത്തുന്ന പ്രായോഗിക ദൃശ്യം ചേർക്കുക' }]
       },
       {
         id: 's8',
@@ -649,7 +748,7 @@
           'തല ഭാഗം അല്പം ഉയർത്തി ഖിബ്‌ലക്ക് അഭിമുഖമായി കിടത്തുക'
         ],
         notes: '',
-        media: [{ id: 'm_slot_9', type: 'video', url: 'videos/slide-9.mp4', caption: 'ഖിബ്‌ല ദിശ കാണിക്കുന്ന ഫോട്ടോ ചേർക്കുക' }]
+        media: [{ id: 'm_slot_9', type: 'placeholder', caption: 'ഖിബ്‌ല ദിശ കാണിക്കുന്ന ഫോട്ടോ ചേർക്കുക' }]
       },
       {
         id: 's10',
@@ -661,7 +760,7 @@
           'കുളിപ്പിക്കുന്നതിനുള്ള തയ്യാറെടുപ്പുകൾ'
         ],
         notes: '',
-        media: [{ id: 'm_slot_10', type: 'video', url: 'videos/slide-10.mp4', caption: 'കുളിപ്പിക്കൽ പ്രാരംഭ വീഡിയോ ചേർക്കുക' }]
+        media: [{ id: 'm_slot_10', type: 'placeholder', caption: 'കുളിപ്പിക്കൽ പ്രാരംഭ വീഡിയോ ചേർക്കുക' }]
       },
       {
         id: 's11',
@@ -673,7 +772,7 @@
           'കഫൻ തുണികൾ ഒരുക്കി വെക്കുന്ന വിധം'
         ],
         notes: '',
-        media: [{ id: 'm_slot_11', type: 'video', url: 'videos/slide-11.mp4', caption: 'Kafan Setting ഫോട്ടോ/വീഡിയോ ചേർക്കുക' }]
+        media: [{ id: 'm_slot_11', type: 'video', url: 'videos/slide11.mp4', caption: 'Kafan Setting പ്രായോഗിക വീഡിയോ' }]
       },
       {
         id: 's12',
@@ -687,7 +786,7 @@
           'റൂമിൽ ഒരു ഭാഗത്ത് ഉലുവാൻ പോലെയുള്ളവ പുകയിപ്പിക്കുക'
         ],
         notes: '',
-        media: []
+        media: [{ id: 'm_slot_12', type: 'video', url: 'videos/slide-12.mp4', caption: 'കുളിപ്പിക്കുന്ന സ്ഥലത്തെ ക്രമീകരണങ്ങൾ' }]
       },
       {
         id: 's13',
@@ -699,7 +798,7 @@
           'കുളിപ്പിക്കുന്നതിന് മുമ്പ് ചെരിച്ചു ഇരുത്തി വയറിൽ അമർത്തി ശുദ്ധീകരിക്കുക'
         ],
         notes: '',
-        media: [{ id: 'm_slot_13', type: 'video', url: 'videos/slide-13.mp4', caption: 'ചെരിച്ചു ഇരുത്തുന്ന ഫോട്ടോ/വീഡിയോ ചേർക്കുക' }]
+        media: [{ id: 'm_slot_13', type: 'placeholder', caption: 'ചെരിച്ചു ഇരുത്തുന്ന ഫോട്ടോ/വീഡിയോ ചേർക്കുക' }]
       },
       {
         id: 's14',
@@ -711,7 +810,7 @@
           'കൈയ്യുറയോ ശീലയോ ചുറ്റി ഗുഹ്യ ഭാഗങ്ങൾ നന്നായി ശുദ്ധിയാക്കുക'
         ],
         notes: '',
-        media: [{ id: 'm_slot_14', type: 'video', url: 'videos/slide-14.mp4', caption: 'പ്രായോഗിക വീഡിയോ/ഫോട്ടോ ചേർക്കുക' }]
+        media: [{ id: 'm_slot_14', type: 'placeholder', caption: 'പ്രായോഗിക വീഡിയോ/ഫോട്ടോ ചേർക്കുക' }]
       },
       {
         id: 's15',
@@ -723,7 +822,7 @@
           'പല്ലുകളും വായയും നനഞ്ഞ ശീല കൊണ്ട് മൃദുവായി വൃത്തിയാക്കുക'
         ],
         notes: '',
-        media: [{ id: 'm_slot_15', type: 'video', url: 'videos/slide-15.mp4', caption: 'മിസ്‌വാക്ക് ചെയ്യുന്ന വീഡിയോ/ഫോട്ടോ ചേർക്കുക' }]
+        media: [{ id: 'm_slot_15', type: 'placeholder', caption: 'മിസ്‌വാക്ക് ചെയ്യുന്ന വീഡിയോ/ഫോട്ടോ ചേർക്കുക' }]
       },
       {
         id: 's16',
@@ -735,7 +834,7 @@
           'മൂക്കിനുള്ളിൽ വെള്ളം കയറാതെ മൃദുവായി ശുദ്ധിയാക്കുക'
         ],
         notes: '',
-        media: [{ id: 'm_slot_16', type: 'video', url: 'videos/slide-16.mp4', caption: 'മൂക്ക് ശുദ്ധിയാക്കുന്ന വീഡിയോ/ഫോട്ടോ ചേർക്കുക' }]
+        media: [{ id: 'm_slot_16', type: 'placeholder', caption: 'മൂക്ക് ശുദ്ധിയാക്കുന്ന വീഡിയോ/ഫോട്ടോ ചേർക്കുക' }]
       },
       {
         id: 's17',
@@ -747,7 +846,7 @@
           'സാധാരണ വുളൂഅ് പോലെ മയ്യിത്തിന് വുളൂഅ് ചെയ്തു കൊടുക്കുക'
         ],
         notes: '',
-        media: [{ id: 'm_slot_17', type: 'video', url: 'videos/slide-17.mp4', caption: 'വുളൂഅ് ചെയ്യുന്ന ഫോട്ടോ/വീഡിയോ ചേർക്കുക' }]
+        media: [{ id: 'm_slot_17', type: 'placeholder', caption: 'വുളൂഅ് ചെയ്യുന്ന ഫോട്ടോ/വീഡിയോ ചേർക്കുക' }]
       },
       {
         id: 's18',
@@ -760,8 +859,7 @@
         ],
         notes: '',
         media: [
-          { id: 'm_slot_18a', type: 'video', url: 'videos/slide-18a.mp4', caption: 'വലതു ഭാഗം കഴുകൽ (വീഡിയോ/ഫോട്ടോ)' },
-          { id: 'm_slot_18b', type: 'video', url: 'videos/slide-18b.mp4', caption: 'ഇടതു ഭാഗം കഴുകൽ (വീഡിയോ/ഫോട്ടോ)' }
+          { id: 'm_slot_18a', type: 'video', url: 'videos/slide-18.mp4', caption: 'വലതു ഭാഗവും ഇടതു ഭാഗവും കഴുകൽ' }
         ]
       },
       {
@@ -774,7 +872,7 @@
           'ഇടതു വശത്തേക്ക് ചെരിച്ചു പിടിച്ച് പുറം ഭാഗവും വലതു വശവും കഴുകുക'
         ],
         notes: '',
-        media: [{ id: 'm_slot_19', type: 'video', url: 'videos/slide-19.mp4', caption: 'പുറം ഭാഗം കഴുകുന്ന ഫോട്ടോ/വീഡിയോ ചേർക്കുക' }]
+        media: [{ id: 'm_slot_19', type: 'video', url: 'videos/slide-19.mp4', caption: 'പുറം ഭാഗം കഴുകുന്ന പ്രായോഗിക വീഡിയോ' }]
       },
       {
         id: 's20',
@@ -787,8 +885,7 @@
         ],
         notes: '',
         media: [
-          { id: 'm_slot_20a', type: 'video', url: 'videos/slide-20a.mp4', caption: 'വെള്ളമൊഴിക്കുന്ന ദൃശ്യം 1' },
-          { id: 'm_slot_20b', type: 'video', url: 'videos/slide-20b.mp4', caption: 'വെള്ളമൊഴിക്കുന്ന ദൃശ്യം 2' }
+          { id: 'm_slot_20a', type: 'video', url: 'videos/slide-20.mp4', caption: 'വെള്ളമൊഴിക്കുന്ന ദൃശ്യം' }
         ]
       },
       {
@@ -806,7 +903,7 @@
           'സുന്നത്തായ മുടി മുറിക്കുന്ന ആവശ്യമെങ്കിൽ ഉള്ളിലേക്ക് മടക്കി കെട്ടുക.'
         ],
         notes: '',
-        media: []
+        media: [{ id: 'm_slot_21', type: 'video', url: 'videos/slide-21.mp4', caption: 'കുളിപ്പിക്കൽ പ്രധാന നിർദ്ദേശങ്ങൾ (വീഡിയോ)' }]
       },
       {
         id: 's22',
@@ -833,7 +930,7 @@
           'മയ്യിത്തിന്റെ പിൻ ഭാഗം, ചെവി, മൂക്ക്, കണ്ണ് പോലെയുള്ള ദ്വാരങ്ങൾ, വിരലുകളുടെ ഇടകൾ, മുഖം മുഴുവൻ, സുജൂദിന്റെ സ്ഥലങ്ങൾ പഞ്ഞി വെക്കുക.'
         ],
         notes: '',
-        media: [{ id: 'm_slot_23', type: 'video', url: 'videos/slide-23.mp4', caption: 'പഞ്ഞി വെക്കുന്നതിന്റെ ഫോട്ടോ/വീഡിയോ ചേർക്കുക' }]
+        media: [{ id: 'm_slot_23', type: 'placeholder', caption: 'പഞ്ഞി വെക്കുന്നതിന്റെ ഫോട്ടോ/വീഡിയോ ചേർക്കുക' }]
       },
       {
         id: 's24',
@@ -845,7 +942,7 @@
           'ഹനൂത്ത് പുരട്ടിയ പഞ്ഞി വെച്ച് ശീല കൊണ്ട് സുരക്ഷിതമായി കെട്ടുക'
         ],
         notes: '',
-        media: [{ id: 'm_slot_24', type: 'video', url: 'videos/slide-24.mp4', caption: 'ശീല കൊണ്ട് കെട്ടുന്ന ഫോട്ടോ/വീഡിയോ ചേർക്കുക' }]
+        media: [{ id: 'm_slot_24', type: 'placeholder', caption: 'ശീല കൊണ്ട് കെട്ടുന്ന ഫോട്ടോ/വീഡിയോ ചേർക്കുക' }]
       },
       {
         id: 's25',
@@ -857,7 +954,7 @@
           'തല ഭാഗം, അര, കാൽ ഭാഗം കെട്ടാൻ പാകത്തിൽ കയർ വെക്കുക. ശേഷം കഫൻ പുടകൾ അതിനു മേലെ ഒന്നിന് മുകളിൽ ഒന്നായി വെക്കുക'
         ],
         notes: '',
-        media: [{ id: 'm_slot_25', type: 'video', url: 'videos/slide-25.mp4', caption: 'കയറും കഫൻ പുടകളും വിരിക്കുന്ന വീഡിയോ ചേർക്കുക' }]
+        media: [{ id: 'm_slot_25', type: 'placeholder', caption: 'കയറും കഫൻ പുടകളും വിരിക്കുന്ന വീഡിയോ ചേർക്കുക' }]
       },
       {
         id: 's26',
@@ -870,8 +967,8 @@
         ],
         notes: '',
         media: [
-          { id: 'm_slot_26a', type: 'video', url: 'videos/slide-26a.mp4', caption: 'പ്രായോഗിക ദൃശ്യം 1' },
-          { id: 'm_slot_26b', type: 'video', url: 'videos/slide-26b.mp4', caption: 'പ്രായോഗിക ദൃശ്യം 2' }
+          { id: 'm_slot_26a', type: 'placeholder', caption: 'പ്രായോഗിക ദൃശ്യം 1' },
+          { id: 'm_slot_26b', type: 'placeholder', caption: 'പ്രായോഗിക ദൃശ്യം 2' }
         ]
       },
       {
@@ -896,7 +993,7 @@
           'തല, അര, കാൽ ഭാഗങ്ങൾ കയർ കൊണ്ട് കെട്ടിയ ശേഷം മയ്യിത്ത് നമസ്കാരത്തിനും ഖബറടക്കത്തിനും സജ്ജമാക്കുക'
         ],
         notes: '',
-        media: [{ id: 'm_slot_28', type: 'video', url: 'videos/slide-28.mp4', caption: 'കഫൻ പൂർത്തിയാക്കിയ ഫോട്ടോ ചേർക്കുക' }]
+        media: [{ id: 'm_slot_28', type: 'placeholder', caption: 'കഫൻ പൂർത്തിയാക്കിയ ഫോട്ടോ ചേർക്കുക' }]
       },
       {
         id: 's29',
@@ -922,8 +1019,8 @@
         ],
         notes: '',
         media: [
-          { id: 'm_slot_30a', type: 'video', url: 'videos/slide-30a.mp4', caption: 'മയ്യിത്ത് എടുക്കൽ ഫോട്ടോ 1' },
-          { id: 'm_slot_30b', type: 'video', url: 'videos/slide-30b.mp4', caption: 'മയ്യിത്ത് എടുക്കൽ ഫോട്ടോ 2' }
+          { id: 'm_slot_30a', type: 'placeholder', caption: 'മയ്യിത്ത് എടുക്കൽ ഫോട്ടോ 1' },
+          { id: 'm_slot_30b', type: 'placeholder', caption: 'മയ്യിത്ത് എടുക്കൽ ഫോട്ടോ 2' }
         ]
       },
       {
@@ -956,7 +1053,7 @@
         arabic: 'وَمِنْ ثَمَّ حَرُمَ خَتْنُهُ وَإِنْ عَصَى بِتَأْخِيرِهِ أَوْ تَعَذَّرَ غَسْلُ مَا تَحْتَ قُلْفَتِهِ - كَمَا اقْتَضَاهُ إِطْلَاقُهُمْ وَعَلَيْهِ فَيُيَمَّمُ عَمَّا تَحْتَهَا.\nعِبَارَةُ شَيْخِنَا وَمَا تَحْتَ قُلْفَةِ الْأَقْلَفِ فَلَا بُدَّ مِنْ فَسْخِهَا وَغَسْلِ مَا تَحْتَهَا إِنْ تَيَسَّرَ وَإِلَّا فَإِنْ كَانَ مَا تَحْتَهَا طَاهِرًا يُمِّمَ عَنْهُ وَإِنْ كَانَ نَجِسًا فَلَا يُيَمَّمُ بَلْ يُدْفَنُ بِلَا صَلَاةٍ كَفَاقِدِ الطَّهُورَيْنِ عَلَى مَا قَالَهُ الرَّمْلِيُّ لِأَنَّ شَرْطَ التَّيَمُّمِ إِزَالَةُ النَّجَاسَةِ وَقَالَ ابْنُ حَجَرٍ يُيَمَّمُ لِلضَّرُورَةِ وَيَنْبَغِي تَقْلِيدُهُ لِأَنَّ فِي دَفْنِهِ بِلَا صَلَاةٍ عَدَمَ احْتِرَامٍ لِلْمَيِّتِ كَمَا قَالَهُ شَيْخُنَا وَعَلَى كُلٍّ فَيَحْرُمُ قَطْعُ قُلْفَتِهِ وَإِنْ عَصَى بِتَأْخِيرِهِ',
         points: ['അവലംബം: തുഹ്‌ഫത്തുൽ മുഹ്‌താജ് മഅ ശർവാനി — കിതാബുൽ ജനാഇസ്'],
         notes: '',
-        media: []
+        media: [{ id: 'm_slot_33', type: 'video', url: 'videos/slide-33.mp4', caption: 'ഖുൽഫത്ത് മസ്അല (വീഡിയോ)' }]
       },
       {
         id: 's34',
@@ -1181,6 +1278,7 @@
       appShell.classList.remove('hidden');
       appShell.classList.add('flex');
       safeSetLS(STORAGE_KEY_AUTH, '1');
+      fetchGitMediaList(false);
       renderAll();
     }
 
@@ -1326,7 +1424,7 @@
       if (!mediaItems || mediaItems.length === 0) return;
       const gridCols = mediaItems.length === 1 ? 'grid-cols-1' : 'grid-cols-1 md:grid-cols-2';
       const grid = document.createElement('div');
-      grid.className = `grid ${gridCols} gap-4 mt-6`;
+      grid.className = `grid ${gridCols} gap-4 mt-5`;
 
       for (const m of mediaItems) {
         const card = document.createElement('div');
@@ -1334,43 +1432,43 @@
 
         if (m.type === 'placeholder') {
           card.innerHTML = `
-            <div class="aspect-video flex flex-col items-center justify-center p-6 text-center bg-gradient-to-br from-[#F3EFE6] to-[#EAE4D7]">
+            <div class="present-media-frame min-h-[200px] max-h-[48vh] flex flex-col items-center justify-center p-6 text-center bg-gradient-to-br from-[#F3EFE6] to-[#EAE4D7]">
               <div class="w-12 h-12 rounded-2xl bg-white/80 border border-[#D8D2C5] flex items-center justify-center text-[#B8924A] mb-3">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
               </div>
               <p class="text-sm font-semibold text-[#0F3D2E] font-ml">${escapeHtml(m.caption || 'Demonstration Media Slot')}</p>
-              <button type="button" class="jump-edit-btn mt-3 px-3 py-1.5 rounded-lg bg-white border border-[#D8D2C5] hover:border-[#0F3D2E] text-xs font-semibold text-[#0F3D2E] transition">+ Add Photo or Video in Editor</button>
+              <button type="button" class="jump-edit-btn mt-3 px-3 py-1.5 rounded-lg bg-white border border-[#D8D2C5] hover:border-[#0F3D2E] text-xs font-semibold text-[#0F3D2E] transition">+ Select Video or Photo in Editor</button>
             </div>
           `;
           card.querySelector('.jump-edit-btn').addEventListener('click', () => setDashboard('edit'));
         } else if (m.type === 'image') {
           const src = await resolveMediaSrc(m);
           card.innerHTML = `
-            <div class="relative group cursor-pointer bg-black/5 flex items-center justify-center max-h-[420px] overflow-hidden">
-              <img src="${src}" alt="${escapeHtml(m.caption || 'Slide photo')}" class="w-full max-h-[420px] object-contain" />
+            <div class="relative group cursor-pointer bg-black/5 flex items-center justify-center present-media-frame max-h-[48vh] overflow-hidden">
+              <img src="${src}" alt="${escapeHtml(m.caption || 'Slide photo')}" class="w-full max-h-[48vh] object-contain" />
               <div class="absolute inset-0 bg-black/0 group-hover:bg-black/15 transition flex items-center justify-center">
                 <span class="opacity-0 group-hover:opacity-100 bg-white/90 text-[#0F3D2E] text-xs font-semibold px-3 py-1.5 rounded-full shadow transition">Click to Zoom</span>
               </div>
             </div>
-            ${m.caption ? `<div class="px-4 py-2.5 text-xs font-medium text-[#5C6B66] font-ml border-t border-[#E5E0D5] bg-white">${escapeHtml(m.caption)}</div>` : ''}
+            ${m.caption ? `<div class="px-4 py-2 text-xs font-medium text-[#5C6B66] font-ml border-t border-[#E5E0D5] bg-white">${escapeHtml(m.caption)}</div>` : ''}
           `;
           card.querySelector('img').addEventListener('click', () => openLightbox(src, m.caption));
         } else if (m.type === 'video') {
           const ytId = m.url ? extractYouTubeId(m.url) : null;
           if (ytId) {
             card.innerHTML = `
-              <div class="aspect-video bg-black">
+              <div class="present-media-frame w-full h-[46vh] bg-black">
                 <iframe class="w-full h-full" src="https://www.youtube.com/embed/${ytId}" allowfullscreen></iframe>
               </div>
-              ${m.caption ? `<div class="px-4 py-2.5 text-xs font-medium text-[#5C6B66] font-ml border-t border-[#E5E0D5] bg-white">${escapeHtml(m.caption)}</div>` : ''}
+              ${m.caption ? `<div class="px-4 py-2 text-xs font-medium text-[#5C6B66] font-ml border-t border-[#E5E0D5] bg-white">${escapeHtml(m.caption)}</div>` : ''}
             `;
           } else {
             const src = await resolveMediaSrc(m);
             card.innerHTML = `
-              <div class="aspect-video bg-black flex items-center justify-center">
-                <video src="${src}" controls playsinline class="w-full h-full max-h-[440px]"></video>
+              <div class="bg-black flex items-center justify-center present-media-frame max-h-[50vh] w-full overflow-hidden">
+                <video src="${src}" controls playsinline class="w-full h-full max-h-[50vh] object-contain"></video>
               </div>
-              ${m.caption ? `<div class="px-4 py-2.5 text-xs font-medium text-[#5C6B66] font-ml border-t border-[#E5E0D5] bg-white">${escapeHtml(m.caption)}</div>` : ''}
+              ${m.caption ? `<div class="px-4 py-2 text-xs font-medium text-[#5C6B66] font-ml border-t border-[#E5E0D5] bg-white">${escapeHtml(m.caption)}</div>` : ''}
             `;
           }
         }
@@ -1403,12 +1501,12 @@
 
       // Header
       const header = document.createElement('div');
-      header.className = 'mb-6';
+      header.className = 'mb-4';
       header.innerHTML = `
-        <div class="flex items-center justify-between gap-3 mb-2">
+        <div class="flex items-center justify-between gap-3 mb-1.5">
           <span class="text-xs font-bold uppercase tracking-widest text-[#B8924A]">Slide ${currentIndex + 1}</span>
         </div>
-        <h2 class="text-2xl sm:text-3xl font-bold text-[#0F3D2E] font-ml leading-snug" style="font-size: ${1.65 * fontScale}rem">${escapeHtml(s.title)}</h2>
+        <h2 class="text-xl sm:text-2xl font-bold text-[#0F3D2E] font-ml leading-snug" style="font-size: ${1.5 * fontScale}rem">${escapeHtml(s.title)}</h2>
       `;
       content.appendChild(header);
 
@@ -1417,10 +1515,10 @@
         const arBox = document.createElement('div');
         const isDua = s.layout === 'dua';
         arBox.className = isDua
-          ? 'my-6 p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-[#0F3D2E] to-[#165B44] text-white text-center shadow-lg border border-[#B8924A]/40'
-          : 'my-5 p-5 sm:p-7 rounded-2xl bg-[#FAF8F4] border border-[#E5E0D5] text-[#1A2421]';
+          ? 'my-5 p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-[#0F3D2E] to-[#165B44] text-white text-center shadow-lg border border-[#B8924A]/40'
+          : 'my-4 p-5 sm:p-6 rounded-2xl bg-[#FAF8F4] border border-[#E5E0D5] text-[#1A2421]';
         arBox.innerHTML = `
-          <p class="font-ar whitespace-pre-wrap ${isDua ? 'text-2xl sm:text-4xl text-[#F7E7C4]' : 'text-xl sm:text-2xl'}" style="font-size: ${(isDua ? 2.0 : 1.45) * fontScale}rem">${escapeHtml(s.arabic)}</p>
+          <p class="font-ar whitespace-pre-wrap ${isDua ? 'text-2xl sm:text-4xl text-[#F7E7C4]' : 'text-xl sm:text-2xl'}" style="font-size: ${(isDua ? 1.9 : 1.38) * fontScale}rem">${escapeHtml(s.arabic)}</p>
         `;
         content.appendChild(arBox);
       }
@@ -1429,26 +1527,26 @@
       if (s.points && s.points.length > 0) {
         if (s.layout === 'branches') {
           const grid = document.createElement('div');
-          grid.className = `grid grid-cols-1 ${s.points.length > 1 ? 'sm:grid-cols-2' : ''} gap-4 my-4`;
+          grid.className = `grid grid-cols-1 ${s.points.length > 1 ? 'sm:grid-cols-2' : ''} gap-3.5 my-3`;
           s.points.forEach((pt, i) => {
             const box = document.createElement('div');
-            box.className = 'p-5 sm:p-6 rounded-2xl bg-[#E9F2EE] border border-[#0F3D2E]/15 flex items-center gap-3.5 shadow-sm';
+            box.className = 'p-4 sm:p-5 rounded-2xl bg-[#E9F2EE] border border-[#0F3D2E]/15 flex items-center gap-3.5 shadow-sm';
             box.innerHTML = `
               <span class="w-8 h-8 rounded-full bg-[#0F3D2E] text-[#E8D2A6] text-sm font-bold flex items-center justify-center shrink-0">${i + 1}</span>
-              <p class="font-ml font-semibold text-[#0F3D2E]" style="font-size: ${1.15 * fontScale}rem">${escapeHtml(pt)}</p>
+              <p class="font-ml font-semibold text-[#0F3D2E]" style="font-size: ${1.12 * fontScale}rem">${escapeHtml(pt)}</p>
             `;
             grid.appendChild(box);
           });
           content.appendChild(grid);
         } else {
           const ul = document.createElement('ul');
-          ul.className = 'space-y-3 my-4';
+          ul.className = 'space-y-2.5 my-3';
           s.points.forEach((pt, i) => {
             const li = document.createElement('li');
-            li.className = 'flex items-start gap-3.5 p-3.5 sm:p-4 rounded-2xl bg-[#FAF8F4] border border-[#EAE4D7] hover:border-[#B8924A]/50 transition';
+            li.className = 'flex items-start gap-3 p-3 sm:p-3.5 rounded-2xl bg-[#FAF8F4] border border-[#EAE4D7] hover:border-[#B8924A]/50 transition';
             li.innerHTML = `
-              <span class="w-7 h-7 rounded-lg bg-[#0F3D2E] text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">${i + 1}</span>
-              <span class="font-ml text-[#1A2421] font-medium" style="font-size: ${1.08 * fontScale}rem">${escapeHtml(pt)}</span>
+              <span class="w-6 h-6 rounded-lg bg-[#0F3D2E] text-white text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">${i + 1}</span>
+              <span class="font-ml text-[#1A2421] font-medium" style="font-size: ${1.04 * fontScale}rem">${escapeHtml(pt)}</span>
             `;
             ul.appendChild(li);
           });
@@ -1458,6 +1556,9 @@
 
       // Media
       await renderPresentMedia(s.media, content);
+
+      // Reset stage scroll to top when switching slides
+      document.getElementById('present-stage-wrap').scrollTop = 0;
 
       // Notes
       const notesPanel = document.getElementById('present-notes-panel');
@@ -1577,7 +1678,7 @@
       container.innerHTML = '';
 
       if (!s.media || s.media.length === 0) {
-        container.innerHTML = `<div class="col-span-full py-8 text-center text-xs text-[#5C6B66] border border-dashed border-[#D8D2C5] rounded-2xl bg-[#FAF8F4]">No photos or videos attached yet. Use the upload buttons above to add media to this slide.</div>`;
+        container.innerHTML = `<div class="col-span-full py-8 text-center text-xs text-[#5C6B66] border border-dashed border-[#D8D2C5] rounded-2xl bg-[#FAF8F4]">No photos or videos attached yet. Select from Git <code class="px-1 bg-white rounded">videos/</code> or upload above.</div>`;
         return;
       }
 
@@ -1590,7 +1691,7 @@
         if (m.type === 'placeholder') {
           previewHtml = `<div class="h-40 flex flex-col items-center justify-center p-4 text-center bg-[#F3EFE6] text-xs text-[#8C6A2B]">
             <span class="font-semibold mb-1">Empty Media Slot (from PPT)</span>
-            <span class="text-[11px] text-[#5C6B66]">Upload a photo/video to replace, or remove this slot.</span>
+            <span class="text-[11px] text-[#5C6B66]">Pick a Git video below or upload a file to replace.</span>
           </div>`;
         } else if (m.type === 'image') {
           const src = await resolveMediaSrc(m);
@@ -1605,19 +1706,50 @@
           }
         }
 
+        // Build options for inline "Change Video from Git videos/" dropdown
+        const optionsHtml = [
+          `<option value="">-- Change to another Git file --</option>`,
+          ...gitMediaFiles.map(path => `<option value="${escapeAttr(path)}" ${m.url === path ? 'selected' : ''}>${escapeHtml(path)}</option>`)
+        ].join('');
+
         card.innerHTML = `
           ${previewHtml}
-          <div class="p-3 bg-white border-t border-[#E5E0D5] flex items-center gap-2">
-            <input type="text" value="${escapeAttr(m.caption || '')}" placeholder="Caption..."
-              class="flex-1 px-2.5 py-1.5 text-xs rounded-lg border border-[#D8D2C5] font-ml focus:outline-none focus:ring-1 focus:ring-[#0F3D2E]" />
-            <button type="button" class="px-2.5 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold">Remove</button>
+          <div class="p-3 bg-white border-t border-[#E5E0D5] space-y-2">
+            <div class="flex items-center gap-2">
+              <label class="text-[10px] font-bold uppercase tracking-wider text-[#0F3D2E] shrink-0">Git File:</label>
+              <select class="change-git-select flex-1 px-2 py-1 text-xs rounded-lg border border-[#D8D2C5] bg-[#FAF8F4] font-medium focus:outline-none focus:ring-1 focus:ring-[#0F3D2E]">
+                ${optionsHtml}
+              </select>
+            </div>
+            <div class="flex items-center gap-2">
+              <input type="text" value="${escapeAttr(m.caption || '')}" placeholder="Caption..."
+                class="caption-input flex-1 px-2.5 py-1.5 text-xs rounded-lg border border-[#D8D2C5] font-ml focus:outline-none focus:ring-1 focus:ring-[#0F3D2E]" />
+              <button type="button" class="remove-media-btn px-2.5 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold">Remove</button>
+            </div>
           </div>
         `;
-        card.querySelector('input').addEventListener('input', (e) => {
+
+        card.querySelector('.change-git-select').addEventListener('change', async (e) => {
+          const chosenPath = e.target.value;
+          if (!chosenPath) return;
+          if (m.blobKey) {
+            await deleteMediaBlob(m.blobKey);
+            delete m.blobKey;
+          }
+          m.type = isImagePath(chosenPath) ? 'image' : 'video';
+          m.url = chosenPath;
+          saveSlides();
+          renderMediaEditor();
+          renderEditList();
+          showToast(`Switched to ${chosenPath}`);
+        });
+
+        card.querySelector('.caption-input').addEventListener('input', (e) => {
           m.caption = e.target.value;
           saveSlides();
         });
-        card.querySelector('button').addEventListener('click', async () => {
+
+        card.querySelector('.remove-media-btn').addEventListener('click', async () => {
           if (m.blobKey) await deleteMediaBlob(m.blobKey);
           s.media.splice(i, 1);
           saveSlides();
@@ -1625,6 +1757,7 @@
           renderEditList();
           showToast('Media removed');
         });
+
         container.appendChild(card);
       }
     }
@@ -1633,6 +1766,7 @@
       if (currentIndex >= slides.length) currentIndex = Math.max(0, slides.length - 1);
       const s = slides[currentIndex];
       renderEditList();
+      populateGitSelectDropdown();
 
       document.getElementById('editor-slide-badge').textContent = `Slide ${currentIndex + 1} of ${slides.length}`;
       document.getElementById('ed-chapter').value = s.chapter || '';
@@ -1674,6 +1808,30 @@
       slides[currentIndex].points.push('');
       saveSlides();
       renderPointsEditor();
+    });
+
+    // Git Videos Folder Handlers
+    document.getElementById('refresh-git-videos-btn').addEventListener('click', () => fetchGitMediaList(true));
+    document.getElementById('add-git-video-btn').addEventListener('click', () => {
+      const path = document.getElementById('git-video-select').value;
+      const caption = document.getElementById('git-video-caption').value.trim();
+      if (!path) {
+        showToast('No Git file selected', 'error');
+        return;
+      }
+      const s = slides[currentIndex];
+      s.media = (s.media || []).filter(m => m.type !== 'placeholder');
+      s.media.push({
+        id: 'm_' + Date.now(),
+        type: isImagePath(path) ? 'image' : 'video',
+        url: path,
+        caption: caption || path.replace(/^videos\//, '')
+      });
+      document.getElementById('git-video-caption').value = '';
+      saveSlides();
+      renderMediaEditor();
+      renderEditList();
+      showToast(`Added ${path}`);
     });
 
     // Slide Management Buttons
@@ -1758,7 +1916,6 @@
     async function handleFileUploads(files, mediaType) {
       const s = slides[currentIndex];
       s.media = s.media || [];
-      // Remove empty placeholder slots automatically when user uploads real media
       s.media = s.media.filter(m => m.type !== 'placeholder');
 
       for (const file of files) {
@@ -1848,7 +2005,7 @@
     document.getElementById('reset-slides-btn').addEventListener('click', () => {
       openModal({
         title: 'Reset to Original PPT Content?',
-        bodyHtml: '<p>This will restore all 35 slides from your original PowerPoint presentation. Any unsaved text edits will be replaced.</p>',
+        bodyHtml: '<p>This will restore all 35 slides from your original PowerPoint presentation (with your Git <code class="px-1 bg-slate-100 rounded">videos/</code> links). Any unsaved text edits will be replaced.</p>',
         actions: [
           {
             label: 'Cancel',
