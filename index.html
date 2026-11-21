@@ -151,10 +151,21 @@
         <p class="text-xs uppercase tracking-widest text-[#E8D2A6] mt-1.5 font-medium">മയ്യിത്ത് പരിപാലനം — Class Studio</p>
       </div>
 
-      <form id="login-form" class="p-8 space-y-5">
+      <form id="login-form" class="p-8 space-y-4">
+        <div id="firebase-status-pill" class="text-[11px] px-3 py-1.5 rounded-lg bg-[#E9F2EE] text-[#0F3D2E] font-semibold text-center">
+          Checking connection mode...
+        </div>
+
+        <div id="login-email-wrap" class="hidden">
+          <label for="login-email"
+            class="block text-xs font-semibold uppercase tracking-wider text-[#5C6B66] mb-1.5">Instructor Email</label>
+          <input id="login-email" type="email" autocomplete="email" placeholder="instructor@example.com"
+            class="w-full px-4 py-3 rounded-xl bg-white border border-[#D8D2C5] text-[#1A2421] focus:outline-none focus:ring-2 focus:ring-[#0F3D2E] focus:border-transparent transition" />
+        </div>
+
         <div>
           <label for="login-password"
-            class="block text-xs font-semibold uppercase tracking-wider text-[#5C6B66] mb-2">Instructor Password</label>
+            class="block text-xs font-semibold uppercase tracking-wider text-[#5C6B66] mb-1.5">Instructor Password</label>
           <div class="relative">
             <input id="login-password" type="password" required autocomplete="current-password"
               placeholder="Enter password to unlock..."
@@ -169,10 +180,10 @@
               </svg>
             </button>
           </div>
-          <p id="login-error" class="text-xs text-rose-600 mt-2 hidden">Incorrect password. Please try again.</p>
+          <p id="login-error" class="text-xs text-rose-600 mt-2 hidden">Incorrect credentials. Please try again.</p>
         </div>
 
-        <button type="submit"
+        <button id="login-submit-btn" type="submit"
           class="w-full py-3 px-4 rounded-xl bg-[#0F3D2E] hover:bg-[#165B44] text-white font-semibold shadow-md shadow-[#0F3D2E]/15 transition flex items-center justify-center gap-2">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -182,9 +193,8 @@
         </button>
 
         <div class="pt-3 border-t border-[#E5E0D5] flex items-center justify-between text-xs text-[#5C6B66]">
-          <span>Default password: <code
-              class="px-1.5 py-0.5 rounded bg-[#E9F2EE] text-[#0F3D2E] font-semibold">mayyith2026</code></span>
-          <span class="text-[#B8924A] font-medium">36 Slides Ready</span>
+          <span id="login-hint-text">Local mode default: <code class="px-1.5 py-0.5 rounded bg-[#E9F2EE] text-[#0F3D2E] font-semibold">mayyith2026</code></span>
+          <button id="open-fb-setup-login-btn" type="button" class="text-[#0F3D2E] font-semibold hover:underline">Firebase Setup</button>
         </div>
       </form>
     </div>
@@ -205,7 +215,7 @@
         </div>
         <div class="min-w-0">
           <h1 class="text-sm sm:text-base font-bold text-[#0F3D2E] font-ml truncate">മയ്യിത്ത് പരിപാലനം</h1>
-          <p class="text-[11px] text-[#5C6B66] hidden sm:block">രോഗശയ്യ മുതൽ ഖബർ വരെ — Class Studio</p>
+          <p id="sync-badge-header" class="text-[11px] text-[#5C6B66] hidden sm:block">Local Storage Mode</p>
         </div>
       </div>
 
@@ -231,7 +241,7 @@
 
       <!-- RIGHT ACTIONS -->
       <div class="flex items-center gap-2">
-        <button id="change-pw-btn" type="button" title="Password & GitHub Sync Settings"
+        <button id="change-pw-btn" type="button" title="Firebase & Security Settings"
           class="p-2 rounded-xl text-[#5C6B66] hover:text-[#0F3D2E] hover:bg-[#F3EFE6] transition">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -308,7 +318,6 @@
           class="flex-1 overflow-y-auto p-3 sm:p-5 lg:p-6 flex flex-col items-center justify-start">
           <div id="present-card"
             class="w-full max-w-6xl my-auto bg-white rounded-3xl shadow-xl shadow-[#0F3D2E]/5 border border-[#E5E0D5] overflow-hidden slide-enter">
-            <!-- Top Accent Strip -->
             <div class="h-2 bg-gradient-to-r from-[#0F3D2E] via-[#B8924A] to-[#0F3D2E]"></div>
             <div id="present-card-content" class="p-5 sm:p-7 lg:p-8"></div>
           </div>
@@ -371,8 +380,8 @@
         </div>
         <div id="edit-slide-list" class="flex-1 overflow-y-auto p-2 space-y-1.5"></div>
         <div class="p-3 border-t border-[#E5E0D5] bg-[#FAF8F4] flex flex-wrap gap-2">
-          <button id="download-slides-json-btn" type="button"
-            class="flex-1 px-2.5 py-1.5 rounded-lg border border-[#D8D2C5] bg-white hover:bg-[#F3EFE6] text-[11px] font-semibold text-[#0F3D2E]">Download slides.json</button>
+          <button id="export-json-btn" type="button"
+            class="flex-1 px-2.5 py-1.5 rounded-lg border border-[#D8D2C5] bg-white hover:bg-[#F3EFE6] text-[11px] font-semibold text-[#0F3D2E]">Export Backup</button>
           <label
             class="flex-1 px-2.5 py-1.5 rounded-lg border border-[#D8D2C5] bg-white hover:bg-[#F3EFE6] text-[11px] font-semibold text-[#0F3D2E] text-center cursor-pointer">
             Import JSON
@@ -388,16 +397,17 @@
       <div class="flex-1 overflow-y-auto p-4 sm:p-8 bg-[#FAF8F4]">
         <div class="max-w-4xl mx-auto space-y-6">
 
-          <!-- MULTI-DEVICE SYNC BANNER -->
-          <div class="bg-gradient-to-r from-[#0F3D2E] to-[#165B44] text-white p-4 rounded-2xl shadow-sm flex flex-wrap items-center justify-between gap-3">
+          <!-- LIVE FIREBASE STATUS BAR -->
+          <div id="live-sync-banner" class="bg-gradient-to-r from-[#0F3D2E] to-[#165B44] text-white p-4 rounded-2xl shadow-sm flex flex-wrap items-center justify-between gap-3">
             <div class="min-w-0">
-              <div class="text-xs font-bold uppercase tracking-wider text-[#E8D2A6]">Multi-Device Sync (GitHub / Vercel)</div>
-              <p class="text-xs text-white/85 mt-0.5">Save your edits to <code class="px-1 bg-white/15 rounded">slides.json</code> in GitHub so all devices see the exact same slides and videos.</p>
+              <div class="flex items-center gap-2">
+                <span id="live-dot" class="w-2.5 h-2.5 rounded-full bg-amber-300"></span>
+                <span id="live-sync-title" class="text-xs font-bold uppercase tracking-wider text-[#E8D2A6]">Local Mode (Not Connected to Firebase Yet)</span>
+              </div>
+              <p id="live-sync-desc" class="text-xs text-white/85 mt-0.5">Connect Firebase in Settings to sync every edit, photo, and video live across all devices automatically.</p>
             </div>
-            <div class="flex items-center gap-2 shrink-0">
-              <button id="sync-github-btn" type="button"
-                class="px-3.5 py-2 rounded-xl bg-[#B8924A] hover:bg-[#A17E3D] text-white text-xs font-semibold transition shadow">Save to All Devices</button>
-            </div>
+            <button id="open-fb-setup-btn" type="button"
+              class="px-3.5 py-2 rounded-xl bg-[#B8924A] hover:bg-[#A17E3D] text-white text-xs font-semibold transition shadow shrink-0">Configure Firebase</button>
           </div>
 
           <!-- Editor Top Action Bar -->
@@ -496,7 +506,7 @@
             <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#F0ECE1] pb-3">
               <div>
                 <h2 class="text-base font-bold text-[#0F3D2E]">Photos &amp; Videos for This Slide</h2>
-                <p class="text-xs text-[#5C6B66]">Select videos from your Git <code class="px-1 py-0.5 rounded bg-[#F3EFE6] text-[#0F3D2E]">videos/</code> folder, upload from device, or attach a URL.
+                <p class="text-xs text-[#5C6B66]">Upload to Firebase Storage (live on all devices), pick from Git <code class="px-1 py-0.5 rounded bg-[#F3EFE6] text-[#0F3D2E]">videos/</code>, or paste a URL.
                 </p>
               </div>
               <div class="flex flex-wrap gap-2">
@@ -518,6 +528,17 @@
                   <span>Upload Video</span>
                   <input id="upload-video-input" type="file" accept="video/*" multiple class="hidden" />
                 </label>
+              </div>
+            </div>
+
+            <!-- Upload Progress Bar (for Firebase Storage) -->
+            <div id="upload-progress-wrap" class="hidden bg-[#E9F2EE] p-3 rounded-xl border border-[#0F3D2E]/20 space-y-1.5">
+              <div class="flex justify-between text-xs font-semibold text-[#0F3D2E]">
+                <span id="upload-progress-label">Uploading to Firebase Storage...</span>
+                <span id="upload-progress-pct">0%</span>
+              </div>
+              <div class="w-full h-2 bg-white rounded-full overflow-hidden">
+                <div id="upload-progress-bar" class="h-full bg-[#0F3D2E] transition-all" style="width: 0%"></div>
               </div>
             </div>
 
@@ -561,7 +582,7 @@
                 URL</button>
             </div>
 
-            <!-- Media Grid (with inline Change Video selector on every card!) -->
+            <!-- Media Grid -->
             <div id="ed-media-list" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
           </div>
         </div>
@@ -570,16 +591,33 @@
 
   </div>
 
-  <script>
-    // ==================== GIT VIDEOS FOLDER & SYNC CONFIG ====================
+  <script type="module">
+    // ==================== 1. FIREBASE CONFIG (PASTE YOUR CONFIG HERE FOR ALL DEVICES) ====================
+    // Option A: Paste your Firebase Web App config below before pushing to GitHub.
+    // Option B: Leave blank here and paste it inside the "Firebase Setup" popup on each device.
+    const EMBEDDED_FIREBASE_CONFIG = {
+      apiKey: "AIzaSyDUOv1CelxhtdIeuKenan0Z0R-vXJoYuaI",
+      authDomain: "mayyith-abcc5.firebaseapp.com",
+      projectId: "mayyith-abcc5",
+      storageBucket: "mayyith-abcc5.firebasestorage.app",
+      messagingSenderId: "741803136395",
+      appId: "1:741803136395:web:64fe46d7ee59c34a47cb8e",
+      measurementId: "G-HY2ZY0JD5V"
+    };
+
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js";
+    import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-storage.js";
+
     const GITHUB_REPO = 'makeitdigitalwyd-sudo/Mayyath';
-    const GITHUB_BRANCH = 'main';
     const GITHUB_VIDEOS_PATH = 'videos';
     const STORAGE_KEY_SLIDES = 'mayyith_slides_v2';
     const STORAGE_KEY_PW = 'mayyith_pw_v1';
     const STORAGE_KEY_AUTH = 'mayyith_auth_v1';
-    const STORAGE_KEY_GH_TOKEN = 'mayyith_gh_token_v1';
+    const STORAGE_KEY_FB_CFG = 'mayyith_fb_config_v1';
     const DEFAULT_PW = 'mayyith2026';
+    const FIRESTORE_DOC_PATH = ['classes', 'mayyith_paripalanam'];
 
     const FALLBACK_GIT_FILES = [
       'videos/slide-4.mp4',
@@ -594,6 +632,150 @@
     ];
     let gitMediaFiles = [...FALLBACK_GIT_FILES];
 
+    let fbApp = null;
+    let fbAuth = null;
+    let fbDb = null;
+    let fbStorage = null;
+    let fbEnabled = false;
+    let unsubscribeSnapshot = null;
+    let suppressNextSave = false;
+
+    function safeGetLS(key, fallback) {
+      try {
+        const val = localStorage.getItem(key);
+        return val !== null ? val : fallback;
+      } catch (e) { return fallback; }
+    }
+
+    function safeSetLS(key, val) {
+      try { localStorage.setItem(key, val); } catch (e) { }
+    }
+
+    function getActiveFirebaseConfig() {
+      if (EMBEDDED_FIREBASE_CONFIG.apiKey && EMBEDDED_FIREBASE_CONFIG.projectId) {
+        return EMBEDDED_FIREBASE_CONFIG;
+      }
+      const raw = safeGetLS(STORAGE_KEY_FB_CFG, '');
+      if (raw) {
+        try {
+          const parsed = JSON.parse(raw);
+          if (parsed && parsed.apiKey && parsed.projectId) return parsed;
+        } catch (e) { }
+      }
+      return null;
+    }
+
+    function initFirebaseIfConfigured() {
+      const cfg = getActiveFirebaseConfig();
+      const pill = document.getElementById('firebase-status-pill');
+      const emailWrap = document.getElementById('login-email-wrap');
+      const hintText = document.getElementById('login-hint-text');
+
+      if (!cfg) {
+        fbEnabled = false;
+        if (pill) pill.textContent = 'Local Mode (Configure Firebase for Live Sync)';
+        if (emailWrap) emailWrap.classList.add('hidden');
+        if (hintText) hintText.innerHTML = 'Default password: <code class="px-1.5 py-0.5 rounded bg-[#E9F2EE] text-[#0F3D2E] font-semibold">mayyith2026</code>';
+        return;
+      }
+
+      try {
+        fbApp = initializeApp(cfg);
+        fbAuth = getAuth(fbApp);
+        fbDb = getFirestore(fbApp);
+        fbStorage = getStorage(fbApp);
+        fbEnabled = true;
+
+        if (pill) {
+          pill.textContent = `Firebase Live Sync Connected (${cfg.projectId})`;
+          pill.className = 'text-[11px] px-3 py-1.5 rounded-lg bg-[#0F3D2E] text-[#E8D2A6] font-semibold text-center';
+        }
+        if (emailWrap) emailWrap.classList.remove('hidden');
+        if (hintText) hintText.textContent = 'Sign in with your Firebase Instructor account';
+
+        onAuthStateChanged(fbAuth, (user) => {
+          if (user) {
+            unlockApp(true);
+            startLiveFirestoreSync();
+          } else {
+            if (unsubscribeSnapshot) { unsubscribeSnapshot(); unsubscribeSnapshot = null; }
+            lockAppUI();
+          }
+        });
+      } catch (err) {
+        fbEnabled = false;
+        showToast('Firebase config error: ' + err.message, 'error');
+      }
+    }
+
+    function startLiveFirestoreSync() {
+      if (!fbDb) return;
+      if (unsubscribeSnapshot) unsubscribeSnapshot();
+      const docRef = doc(fbDb, ...FIRESTORE_DOC_PATH);
+
+      unsubscribeSnapshot = onSnapshot(docRef, (snap) => {
+        if (snap.exists()) {
+          const data = snap.data();
+          if (Array.isArray(data.slides) && data.slides.length > 0) {
+            suppressNextSave = true;
+            slides = data.slides;
+            safeSetLS(STORAGE_KEY_SLIDES, JSON.stringify(slides));
+            renderAll();
+            suppressNextSave = false;
+          }
+        } else {
+          // Seed Firestore on first login with current slides
+          saveSlidesToCloud();
+        }
+        updateLiveBannerUI(true);
+      }, (err) => {
+        showToast('Firestore sync error: ' + err.message, 'error');
+        updateLiveBannerUI(false);
+      });
+    }
+
+    let cloudSaveTimer = null;
+    function saveSlidesToCloud() {
+      if (!fbEnabled || !fbDb || !fbAuth?.currentUser || suppressNextSave) return;
+      clearTimeout(cloudSaveTimer);
+      cloudSaveTimer = setTimeout(async () => {
+        try {
+          const cleanSlides = slides.map(s => ({
+            ...s,
+            media: (s.media || []).map(m => {
+              const copy = { ...m };
+              delete copy.blobKey;
+              return copy;
+            })
+          }));
+          await setDoc(doc(fbDb, ...FIRESTORE_DOC_PATH), {
+            slides: cleanSlides,
+            updatedAt: Date.now()
+          });
+        } catch (err) {
+          showToast('Cloud save failed: ' + err.message, 'error');
+        }
+      }, 450);
+    }
+
+    function updateLiveBannerUI(connected) {
+      const dot = document.getElementById('live-dot');
+      const title = document.getElementById('live-sync-title');
+      const desc = document.getElementById('live-sync-desc');
+      const headerBadge = document.getElementById('sync-badge-header');
+      if (connected && fbEnabled) {
+        if (dot) dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse';
+        if (title) title.textContent = 'Firebase Live Sync Active';
+        if (desc) desc.textContent = 'All edits, photos, and videos sync automatically to every device in real time.';
+        if (headerBadge) headerBadge.textContent = 'Firebase Live Sync Active';
+      } else {
+        if (dot) dot.className = 'w-2.5 h-2.5 rounded-full bg-amber-300';
+        if (title) title.textContent = 'Local Mode (Not Connected to Firebase Yet)';
+        if (desc) desc.textContent = 'Connect Firebase in Settings to sync every edit, photo, and video live across all devices automatically.';
+        if (headerBadge) headerBadge.textContent = 'Local Storage Mode';
+      }
+    }
+
     async function fetchGitMediaList(showFeedback = false) {
       const statusEl = document.getElementById('git-videos-status');
       if (statusEl) statusEl.textContent = 'Syncing...';
@@ -606,9 +788,7 @@
             .filter(item => item.type === 'file' && /\.(mp4|webm|mov|m4v|jpg|jpeg|png|webp)$/i.test(item.name))
             .map(item => `${GITHUB_VIDEOS_PATH}/${item.name}`)
             .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }));
-          if (files.length > 0) {
-            gitMediaFiles = files;
-          }
+          if (files.length > 0) gitMediaFiles = files;
           if (statusEl) statusEl.textContent = `(${gitMediaFiles.length} files synced)`;
           if (showFeedback) showToast(`Synced ${gitMediaFiles.length} files from Git videos/`);
         }
@@ -638,7 +818,7 @@
       return /\.(jpg|jpeg|png|webp|gif)$/i.test(path || '');
     }
 
-    // ==================== DEFAULT SLIDES (SLIDE 1 = രോഗശയ്യ മുതൽ ഖബർ വരെ) ====================
+    // ==================== DEFAULT SLIDES ====================
     const DEFAULT_SLIDES = [
       {
         id: 's0',
@@ -646,9 +826,7 @@
         layout: 'cover',
         title: 'രോഗശയ്യ മുതൽ ഖബർ വരെ',
         arabic: 'كُلُّ نَفْسٍ ذَائِقَةُ الْمَوْتِ',
-        points: [
-          'മയ്യിത്ത് പരിപാലനം — പ്രായോഗിക പഠന ക്ലാസ്'
-        ],
+        points: ['മയ്യിത്ത് പരിപാലനം — പ്രായോഗിക പഠന ക്ലാസ്'],
         notes: 'ക്ലാസ്സിന്റെ പ്രധാന തലക്കെട്ട്: രോഗശയ്യ മുതൽ ഖബർ വരെ.',
         media: []
       },
@@ -658,10 +836,7 @@
         layout: 'branches',
         title: 'മനുഷ്യ ജീവിതം',
         arabic: '',
-        points: [
-          'ഐഹികം — الدنيوية',
-          'പാരത്രികം — البرزخية'
-        ],
+        points: ['ഐഹികം — الدنيوية', 'പാരത്രികം — البرزخية'],
         notes: 'മനുഷ്യ ജീവിതത്തിന്റെ രണ്ട് ഘട്ടങ്ങൾ: ഇഹലോക ജീവിതവും ബർസഖ്/പാരത്രിക ജീവിതവും.',
         media: []
       },
@@ -688,9 +863,7 @@
         layout: 'dua',
         title: 'മരണം ഉറപ്പായാൽ — കണ്ണ് അടച്ചു കൊടുക്കുക',
         arabic: 'بِسْمِ اللَّهِ وَعَلَى مِلَّةِ رَسُولِ اللَّهِ',
-        points: [
-          'മരണം ഉറപ്പായ ഉടൻ ഈ ദിക്ർ ചൊല്ലി കണ്ണ് അടച്ചു കൊടുക്കുക'
-        ],
+        points: ['മരണം ഉറപ്പായ ഉടൻ ഈ ദിക്ർ ചൊല്ലി കണ്ണ് അടച്ചു കൊടുക്കുക'],
         notes: 'കണ്ണ് അടച്ചു കൊടുക്കുമ്പോൾ ചൊല്ലേണ്ട സുന്നത്തായ ദിക്ർ.',
         media: []
       },
@@ -700,16 +873,9 @@
         layout: 'media',
         title: 'മരണാനന്തര പ്രാഥമിക ക്രമീകരണങ്ങൾ (വീഡിയോ)',
         arabic: '',
-        points: [
-          'ഈ ഭാഗത്ത് പ്രായോഗിക വീഡിയോ അപ്‌ലോഡ് ചെയ്ത് കാണിക്കാം'
-        ],
-        notes: 'Editor Studio വഴി നിങ്ങളുടെ കയ്യിലുള്ള വീഡിയോ ഇവിടെ അപ്‌ലോഡ് ചെയ്യുക.',
-        media: [{
-          id: 'm_slot_4',
-          type: 'video',
-          url: 'videos/slide-4.mp4',
-          caption: 'പ്രായോഗിക വീഡിയോ'
-        }]
+        points: ['ഈ ഭാഗത്ത് പ്രായോഗിക വീഡിയോ അപ്‌ലോഡ് ചെയ്ത് കാണിക്കാം'],
+        notes: '',
+        media: [{ id: 'm_slot_4', type: 'video', url: 'videos/slide-4.mp4', caption: 'പ്രായോഗിക വീഡിയോ' }]
       },
       {
         id: 's5',
@@ -717,16 +883,9 @@
         layout: 'media',
         title: 'താട കെട്ടുക — രൂപം 1',
         arabic: '',
-        points: [
-          'വായ തുറന്നു പോകാതിരിക്കാൻ താടി തലയിലേക്ക് ചേർത്ത് കെട്ടുക (രൂപം-1)'
-        ],
+        points: ['വായ തുറന്നു പോകാതിരിക്കാൻ താടി തലയിലേക്ക് ചേർത്ത് കെട്ടുക (രൂപം-1)'],
         notes: '',
-        media: [{
-          id: 'm_slot_5',
-          type: 'video',
-          url: 'videos/slide-5.mp4',
-          caption: 'പ്രായോഗിക വീഡിയോ'
-        }]
+        media: [{ id: 'm_slot_5', type: 'video', url: 'videos/slide-5.mp4', caption: 'പ്രായോഗിക വീഡിയോ' }]
       },
       {
         id: 's6',
@@ -734,9 +893,7 @@
         layout: 'media',
         title: 'താട കെട്ടുക — രൂപം 2 (നല്ലത്)',
         arabic: '',
-        points: [
-          'കൂടുതൽ ഉചിതമായ രണ്ടാമത്തെ രൂപം'
-        ],
+        points: ['കൂടുതൽ ഉചിതമായ രണ്ടാമത്തെ രൂപം'],
         notes: '',
         media: [{ id: 'm_slot_6', type: 'placeholder', caption: 'രൂപം-2 (നല്ലത്) — ഫോട്ടോ/വീഡിയോ ചേർക്കുക' }]
       },
@@ -746,9 +903,7 @@
         layout: 'media',
         title: 'കെണിപ്പുകൾ മയപ്പെടുത്തി കൊടുക്കുക',
         arabic: '',
-        points: [
-          'കൈകാലുകളുടെ സന്ധികൾ മടക്കി നിവർത്തി മയപ്പെടുത്തി വെക്കുക'
-        ],
+        points: ['കൈകാലുകളുടെ സന്ധികൾ മടക്കി നിവർത്തി മയപ്പെടുത്തി വെക്കുക'],
         notes: '',
         media: [{ id: 'm_slot_7', type: 'placeholder', caption: 'കെണിപ്പുകൾ മയപ്പെടുത്തുന്ന പ്രായോഗിക ദൃശ്യം ചേർക്കുക' }]
       },
@@ -773,9 +928,7 @@
         layout: 'media',
         title: 'ഖിബ്‌ലക്ക് നേരെ മൂടി കിടത്തിയ രൂപം',
         arabic: '',
-        points: [
-          'തല ഭാഗം അല്പം ഉയർത്തി ഖിബ്‌ലക്ക് അഭിമുഖമായി കിടത്തുക'
-        ],
+        points: ['തല ഭാഗം അല്പം ഉയർത്തി ഖിബ്‌ലക്ക് അഭിമുഖമായി കിടത്തുക'],
         notes: '',
         media: [{ id: 'm_slot_9', type: 'placeholder', caption: 'ഖിബ്‌ല ദിശ കാണിക്കുന്ന ഫോട്ടോ ചേർക്കുക' }]
       },
@@ -785,9 +938,7 @@
         layout: 'media',
         title: 'മയ്യിത്ത് കുളിപ്പിക്കൽ — പ്രാരംഭ വീഡിയോ',
         arabic: '',
-        points: [
-          'കുളിപ്പിക്കുന്നതിനുള്ള തയ്യാറെടുപ്പുകൾ'
-        ],
+        points: ['കുളിപ്പിക്കുന്നതിനുള്ള തയ്യാറെടുപ്പുകൾ'],
         notes: '',
         media: [{ id: 'm_slot_10', type: 'placeholder', caption: 'കുളിപ്പിക്കൽ പ്രാരംഭ വീഡിയോ ചേർക്കുക' }]
       },
@@ -797,9 +948,7 @@
         layout: 'media',
         title: 'Kafan Setting',
         arabic: '',
-        points: [
-          'കഫൻ തുണികൾ ഒരുക്കി വെക്കുന്ന വിധം'
-        ],
+        points: ['കഫൻ തുണികൾ ഒരുക്കി വെക്കുന്ന വിധം'],
         notes: '',
         media: [{ id: 'm_slot_11', type: 'video', url: 'videos/slide11.mp4', caption: 'Kafan Setting പ്രായോഗിക വീഡിയോ' }]
       },
@@ -823,9 +972,7 @@
         layout: 'media',
         title: 'ചെരിച്ചു ഇരുത്തുക',
         arabic: '',
-        points: [
-          'കുളിപ്പിക്കുന്നതിന് മുമ്പ് ചെരിച്ചു ഇരുത്തി വയറിൽ അമർത്തി ശുദ്ധീകരിക്കുക'
-        ],
+        points: ['കുളിപ്പിക്കുന്നതിന് മുമ്പ് ചെരിച്ചു ഇരുത്തി വയറിൽ അമർത്തി ശുദ്ധീകരിക്കുക'],
         notes: '',
         media: [{ id: 'm_slot_13', type: 'placeholder', caption: 'ചെരിച്ചു ഇരുത്തുന്ന ഫോട്ടോ/വീഡിയോ ചേർക്കുക' }]
       },
@@ -835,9 +982,7 @@
         layout: 'media',
         title: 'ഇടതു മുൻകയ്യിൽ ശീല ചുറ്റി ഗുഹ്യ ഭാഗങ്ങൾ കഴുകുക',
         arabic: '',
-        points: [
-          'കൈയ്യുറയോ ശീലയോ ചുറ്റി ഗുഹ്യ ഭാഗങ്ങൾ നന്നായി ശുദ്ധിയാക്കുക'
-        ],
+        points: ['കൈയ്യുറയോ ശീലയോ ചുറ്റി ഗുഹ്യ ഭാഗങ്ങൾ നന്നായി ശുദ്ധിയാക്കുക'],
         notes: '',
         media: [{ id: 'm_slot_14', type: 'placeholder', caption: 'പ്രായോഗിക വീഡിയോ/ഫോട്ടോ ചേർക്കുക' }]
       },
@@ -847,9 +992,7 @@
         layout: 'media',
         title: 'ഇടതു കയ്യിന്റെ ചൂണ്ടു വിരലിൽ ശീല ചുറ്റി തല അല്പം ചെരിച്ചു മിസ്‌വാക്ക് ചെയ്തു കൊടുക്കുക',
         arabic: '',
-        points: [
-          'പല്ലുകളും വായയും നനഞ്ഞ ശീല കൊണ്ട് മൃദുവായി വൃത്തിയാക്കുക'
-        ],
+        points: ['പല്ലുകളും വായയും നനഞ്ഞ ശീല കൊണ്ട് മൃദുവായി വൃത്തിയാക്കുക'],
         notes: '',
         media: [{ id: 'm_slot_15', type: 'placeholder', caption: 'മിസ്‌വാക്ക് ചെയ്യുന്ന വീഡിയോ/ഫോട്ടോ ചേർക്കുക' }]
       },
@@ -859,9 +1002,7 @@
         layout: 'media',
         title: 'ഇടതു കയ്യിന്റെ ചെറു വിരലിൽ ശീല ചുറ്റി മൂക്കിന്റെ ഇരു ദ്വാരങ്ങളും ശുദ്ധിയാക്കുക',
         arabic: '',
-        points: [
-          'മൂക്കിനുള്ളിൽ വെള്ളം കയറാതെ മൃദുവായി ശുദ്ധിയാക്കുക'
-        ],
+        points: ['മൂക്കിനുള്ളിൽ വെള്ളം കയറാതെ മൃദുവായി ശുദ്ധിയാക്കുക'],
         notes: '',
         media: [{ id: 'm_slot_16', type: 'placeholder', caption: 'മൂക്ക് ശുദ്ധിയാക്കുന്ന വീഡിയോ/ഫോട്ടോ ചേർക്കുക' }]
       },
@@ -871,9 +1012,7 @@
         layout: 'media',
         title: 'മയ്യിത്തിന് വുളൂഅ് ചെയ്തു കൊടുക്കുക',
         arabic: '',
-        points: [
-          'സാധാരണ വുളൂഅ് പോലെ മയ്യിത്തിന് വുളൂഅ് ചെയ്തു കൊടുക്കുക'
-        ],
+        points: ['സാധാരണ വുളൂഅ് പോലെ മയ്യിത്തിന് വുളൂഅ് ചെയ്തു കൊടുക്കുക'],
         notes: '',
         media: [{ id: 'm_slot_17', type: 'placeholder', caption: 'വുളൂഅ് ചെയ്യുന്ന ഫോട്ടോ/വീഡിയോ ചേർക്കുക' }]
       },
@@ -883,13 +1022,9 @@
         layout: 'media',
         title: 'ആദ്യം വലതു ഭാഗവും പിന്നെ ഇടതു ഭാഗവും കഴുകുക',
         arabic: '',
-        points: [
-          'ശരീരത്തിന്റെ വലതു ഭാഗം ആദ്യവും തുടർന്ന് ഇടതു ഭാഗവും കഴുകുക'
-        ],
+        points: ['ശരീരത്തിന്റെ വലതു ഭാഗം ആദ്യവും തുടർന്ന് ഇടതു ഭാഗവും കഴുകുക'],
         notes: '',
-        media: [
-          { id: 'm_slot_18a', type: 'video', url: 'videos/slide-18.mp4', caption: 'വലതു ഭാഗവും ഇടതു ഭാഗവും കഴുകൽ' }
-        ]
+        media: [{ id: 'm_slot_18a', type: 'video', url: 'videos/slide-18.mp4', caption: 'വലതു ഭാഗവും ഇടതു ഭാഗവും കഴുകൽ' }]
       },
       {
         id: 's19',
@@ -897,9 +1032,7 @@
         layout: 'media',
         title: 'പിന്നെ ഇടതു വശത്തിന്മേൽ ചെരിച്ചു പിടിച്ചു പുറം ഭാഗം വലതു വശം കഴുകുക',
         arabic: '',
-        points: [
-          'ഇടതു വശത്തേക്ക് ചെരിച്ചു പിടിച്ച് പുറം ഭാഗവും വലതു വശവും കഴുകുക'
-        ],
+        points: ['ഇടതു വശത്തേക്ക് ചെരിച്ചു പിടിച്ച് പുറം ഭാഗവും വലതു വശവും കഴുകുക'],
         notes: '',
         media: [{ id: 'm_slot_19', type: 'video', url: 'videos/slide-19.mp4', caption: 'പുറം ഭാഗം കഴുകുന്ന പ്രായോഗിക വീഡിയോ' }]
       },
@@ -909,13 +1042,9 @@
         layout: 'media',
         title: 'ശേഷം മലർത്തി കിടത്തി ശരീരം മുഴുവൻ മൂന്നു തവണ വെള്ളമൊഴിക്കുക',
         arabic: '',
-        points: [
-          'തല മുതൽ കാൽ വരെ ശരീരം മുഴുവൻ മൂന്നു തവണ ശുദ്ധജലം ഒഴിക്കുക'
-        ],
+        points: ['തല മുതൽ കാൽ വരെ ശരീരം മുഴുവൻ മൂന്നു തവണ ശുദ്ധജലം ഒഴിക്കുക'],
         notes: '',
-        media: [
-          { id: 'm_slot_20a', type: 'video', url: 'videos/slide-20.mp4', caption: 'വെള്ളമൊഴിക്കുന്ന ദൃശ്യം' }
-        ]
+        media: [{ id: 'm_slot_20a', type: 'video', url: 'videos/slide-20.mp4', caption: 'വെള്ളമൊഴിക്കുന്ന ദൃശ്യം' }]
       },
       {
         id: 's21',
@@ -955,9 +1084,7 @@
         layout: 'media',
         title: 'പഞ്ഞി വെക്കേണ്ട സ്ഥലങ്ങൾ',
         arabic: '',
-        points: [
-          'മയ്യിത്തിന്റെ പിൻ ഭാഗം, ചെവി, മൂക്ക്, കണ്ണ് പോലെയുള്ള ദ്വാരങ്ങൾ, വിരലുകളുടെ ഇടകൾ, മുഖം മുഴുവൻ, സുജൂദിന്റെ സ്ഥലങ്ങൾ പഞ്ഞി വെക്കുക.'
-        ],
+        points: ['മയ്യിത്തിന്റെ പിൻ ഭാഗം, ചെവി, മൂക്ക്, കണ്ണ് പോലെയുള്ള ദ്വാരങ്ങൾ, വിരലുകളുടെ ഇടകൾ, മുഖം മുഴുവൻ, സുജൂദിന്റെ സ്ഥലങ്ങൾ പഞ്ഞി വെക്കുക.'],
         notes: '',
         media: [{ id: 'm_slot_23', type: 'placeholder', caption: 'പഞ്ഞി വെക്കുന്നതിന്റെ ഫോട്ടോ/വീഡിയോ ചേർക്കുക' }]
       },
@@ -967,9 +1094,7 @@
         layout: 'media',
         title: 'ഗുഹ്യസ്ഥലങ്ങളിൽ പഞ്ഞി വെച്ച ശേഷം ഒരു ശീല കൊണ്ട് കെട്ടുക',
         arabic: '',
-        points: [
-          'ഹനൂത്ത് പുരട്ടിയ പഞ്ഞി വെച്ച് ശീല കൊണ്ട് സുരക്ഷിതമായി കെട്ടുക'
-        ],
+        points: ['ഹനൂത്ത് പുരട്ടിയ പഞ്ഞി വെച്ച് ശീല കൊണ്ട് സുരക്ഷിതമായി കെട്ടുക'],
         notes: '',
         media: [{ id: 'm_slot_24', type: 'placeholder', caption: 'ശീല കൊണ്ട് കെട്ടുന്ന ഫോട്ടോ/വീഡിയോ ചേർക്കുക' }]
       },
@@ -979,9 +1104,7 @@
         layout: 'media',
         title: 'കയറും കഫൻ പുടകളും വിരിക്കൽ',
         arabic: '',
-        points: [
-          'തല ഭാഗം, അര, കാൽ ഭാഗം കെട്ടാൻ പാകത്തിൽ കയർ വെക്കുക. ശേഷം കഫൻ പുടകൾ അതിനു മേലെ ഒന്നിന് മുകളിൽ ഒന്നായി വെക്കുക'
-        ],
+        points: ['തല ഭാഗം, അര, കാൽ ഭാഗം കെട്ടാൻ പാകത്തിൽ കയർ വെക്കുക. ശേഷം കഫൻ പുടകൾ അതിനു മേലെ ഒന്നിന് മുകളിൽ ഒന്നായി വെക്കുക'],
         notes: '',
         media: [{ id: 'm_slot_25', type: 'placeholder', caption: 'കയറും കഫൻ പുടകളും വിരിക്കുന്ന വീഡിയോ ചേർക്കുക' }]
       },
@@ -991,9 +1114,7 @@
         layout: 'media',
         title: 'കഫൻ പുടകൾക്ക് മുകളിൽ കിടത്തൽ',
         arabic: '',
-        points: [
-          'തോർത്തിയ മയ്യിത്തിനെ കഫൻ പുടകൾക്ക് മുകളിലേക്ക് എടുത്ത് കിടത്തുക'
-        ],
+        points: ['തോർത്തിയ മയ്യിത്തിനെ കഫൻ പുടകൾക്ക് മുകളിലേക്ക് എടുത്ത് കിടത്തുക'],
         notes: '',
         media: [
           { id: 'm_slot_26a', type: 'placeholder', caption: 'പ്രായോഗിക ദൃശ്യം 1' },
@@ -1006,9 +1127,7 @@
         layout: 'points',
         title: 'കഫൻ മടക്കുന്ന വിധം',
         arabic: '',
-        points: [
-          'ശേഷം ഓരോന്നോരോന്നായി മടക്കി കഫൻ ചെയ്യുക. ആദ്യം ഇടതു ഭാഗത്ത് നിന്ന് വലത്തോട്ട് പിന്നെ വലതു നിന്ന് ഇടത്തോട്ടും മടക്കുക.'
-        ],
+        points: ['ശേഷം ഓരോന്നോരോന്നായി മടക്കി കഫൻ ചെയ്യുക. ആദ്യം ഇടതു ഭാഗത്ത് നിന്ന് വലത്തോട്ട് പിന്നെ വലതു നിന്ന് ഇടത്തോട്ടും മടക്കുക.'],
         notes: '',
         media: []
       },
@@ -1018,9 +1137,7 @@
         layout: 'media',
         title: 'കഫൻ പൂർത്തിയാക്കിയ രൂപം',
         arabic: '',
-        points: [
-          'തല, അര, കാൽ ഭാഗങ്ങൾ കയർ കൊണ്ട് കെട്ടിയ ശേഷം മയ്യിത്ത് നമസ്കാരത്തിനും ഖബറടക്കത്തിനും സജ്ജമാക്കുക'
-        ],
+        points: ['തല, അര, കാൽ ഭാഗങ്ങൾ കയർ കൊണ്ട് കെട്ടിയ ശേഷം മയ്യിത്ത് നമസ്കാരത്തിനും ഖബറടക്കത്തിനും സജ്ജമാക്കുക'],
         notes: '',
         media: [{ id: 'm_slot_28', type: 'placeholder', caption: 'കഫൻ പൂർത്തിയാക്കിയ ഫോട്ടോ ചേർക്കുക' }]
       },
@@ -1030,10 +1147,7 @@
         layout: 'branches',
         title: 'മയ്യിത്ത് എടുക്കൽ രണ്ടു രൂപം — രൂപം 1',
         arabic: '',
-        points: [
-          'രൂപം 1: മൂന്നു പേർ ചേർന്ന് പിടിക്കുക',
-          'ഏറ്റവും ശ്രേഷ്ഠമായത് (തർബീഇൽ മികച്ച രീതി)'
-        ],
+        points: ['രൂപം 1: മൂന്നു പേർ ചേർന്ന് പിടിക്കുക', 'ഏറ്റവും ശ്രേഷ്ഠമായത് (തർബീഇൽ മികച്ച രീതി)'],
         notes: '',
         media: []
       },
@@ -1043,9 +1157,7 @@
         layout: 'media',
         title: 'മയ്യിത്ത് എടുക്കുന്ന രീതി (പ്രായോഗിക ദൃശ്യം)',
         arabic: '',
-        points: [
-          'മയ്യിത്ത് കട്ടിൽ തോളിലേറ്റി കൊണ്ടുപോകുന്ന രൂപം'
-        ],
+        points: ['മയ്യിത്ത് കട്ടിൽ തോളിലേറ്റി കൊണ്ടുപോകുന്ന രൂപം'],
         notes: '',
         media: [
           { id: 'm_slot_30a', type: 'placeholder', caption: 'മയ്യിത്ത് എടുക്കൽ ഫോട്ടോ 1' },
@@ -1058,9 +1170,7 @@
         layout: 'branches',
         title: 'മയ്യിത്ത് എടുക്കൽ — രൂപം 2',
         arabic: '',
-        points: [
-          'രൂപം 2: നാലു പേർ ചേർന്ന് പിടിക്കുക'
-        ],
+        points: ['രൂപം 2: നാലു പേർ ചേർന്ന് പിടിക്കുക'],
         notes: '',
         media: []
       },
@@ -1106,7 +1216,7 @@
       }
     ];
 
-    // ==================== STORAGE HELPERS ====================
+    // ==================== LOCAL STORAGE + INDEXEDDB FALLBACK ====================
     const memoryMediaFallback = new Map();
     let idbInstance = null;
 
@@ -1117,18 +1227,11 @@
           const req = indexedDB.open('MayyithMediaDB', 1);
           req.onupgradeneeded = (e) => {
             const db = e.target.result;
-            if (!db.objectStoreNames.contains('media')) {
-              db.createObjectStore('media');
-            }
+            if (!db.objectStoreNames.contains('media')) db.createObjectStore('media');
           };
-          req.onsuccess = (e) => {
-            idbInstance = e.target.result;
-            resolve(idbInstance);
-          };
+          req.onsuccess = (e) => { idbInstance = e.target.result; resolve(idbInstance); };
           req.onerror = () => resolve(null);
-        } catch (err) {
-          resolve(null);
-        }
+        } catch (err) { resolve(null); }
       });
     }
 
@@ -1185,18 +1288,7 @@
       return url;
     }
 
-    function safeGetLS(key, fallback) {
-      try {
-        const val = localStorage.getItem(key);
-        return val !== null ? val : fallback;
-      } catch (e) { return fallback; }
-    }
-
-    function safeSetLS(key, val) {
-      try { localStorage.setItem(key, val); } catch (e) { }
-    }
-
-    // ==================== APPLICATION STATE & MULTI-DEVICE SYNC ====================
+    // ==================== APPLICATION STATE ====================
     let slides = [];
     let currentIndex = 0;
     let activeDashboard = 'present';
@@ -1217,66 +1309,7 @@
 
     function saveSlides() {
       safeSetLS(STORAGE_KEY_SLIDES, JSON.stringify(slides));
-    }
-
-    async function loadSharedSlidesFromRepo() {
-      try {
-        const res = await fetch(`slides.json?t=${Date.now()}`, { cache: 'no-store' });
-        if (!res.ok) return;
-        const remote = await res.json();
-        if (Array.isArray(remote) && remote.length > 0) {
-          slides = remote;
-          saveSlides();
-          renderAll();
-        }
-      } catch (e) {
-        // slides.json not created in repo yet — keep local/default slides silently
-      }
-    }
-
-    async function pushSlidesToGitHub(token) {
-      const cleanSlides = slides.map(s => ({
-        ...s,
-        media: (s.media || []).map(m => {
-          const copy = { ...m };
-          delete copy.blobKey;
-          return copy;
-        })
-      }));
-      const jsonContent = JSON.stringify(cleanSlides, null, 2);
-      const encoded = btoa(unescape(encodeURIComponent(jsonContent)));
-      const apiUrl = `https://api.github.com/repos/${GITHUB_REPO}/contents/slides.json`;
-
-      let sha = undefined;
-      try {
-        const getRes = await fetch(apiUrl, {
-          headers: { Authorization: `Bearer ${token}`, Accept: 'application/vnd.github+json' }
-        });
-        if (getRes.ok) {
-          const info = await getRes.json();
-          sha = info.sha;
-        }
-      } catch (e) { }
-
-      const putRes = await fetch(apiUrl, {
-        method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          Accept: 'application/vnd.github+json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          message: 'Update slides.json from Class Studio',
-          content: encoded,
-          branch: GITHUB_BRANCH,
-          ...(sha ? { sha } : {})
-        })
-      });
-
-      if (!putRes.ok) {
-        const errData = await putRes.json().catch(() => ({}));
-        throw new Error(errData.message || `GitHub error ${putRes.status}`);
-      }
+      saveSlidesToCloud();
     }
 
     function getStoredPassword() {
@@ -1294,7 +1327,7 @@
       setTimeout(() => {
         el.style.opacity = '0';
         setTimeout(() => el.remove(), 250);
-      }, 2600);
+      }, 2800);
     }
 
     function openModal({ title, bodyHtml, actions }) {
@@ -1346,10 +1379,67 @@
       }
     });
 
+    // ==================== FIREBASE SETUP MODAL ====================
+    function openFirebaseSetupModal() {
+      const existing = safeGetLS(STORAGE_KEY_FB_CFG, '');
+      openModal({
+        title: 'Connect Firebase (Live Sync)',
+        bodyHtml: `
+          <div class="space-y-3 text-xs text-slate-600">
+            <p>Paste your Firebase Web App <code class="bg-slate-100 px-1 rounded">firebaseConfig</code> JSON object below (from Firebase Console → Project Settings → Your Apps):</p>
+            <textarea id="fb-cfg-textarea" rows="7" placeholder='{\n  "apiKey": "...",\n  "authDomain": "...",\n  "projectId": "...",\n  "storageBucket": "...",\n  "messagingSenderId": "...",\n  "appId": "..."\n}'
+              class="w-full px-3 py-2 rounded-xl border border-slate-300 font-mono text-[11px] focus:outline-none focus:ring-2 focus:ring-[#0F3D2E]">${escapeHtml(existing)}</textarea>
+            <p id="fb-cfg-err" class="text-rose-600 hidden"></p>
+          </div>
+        `,
+        actions: [
+          {
+            label: 'Clear / Use Local',
+            className: 'px-3 py-2 rounded-xl border border-rose-200 text-xs font-semibold text-rose-700 hover:bg-rose-50',
+            onClick: (close) => {
+              safeSetLS(STORAGE_KEY_FB_CFG, '');
+              close();
+              showToast('Cleared saved Firebase config. Reloading...');
+              setTimeout(() => location.reload(), 600);
+            }
+          },
+          {
+            label: 'Save & Connect',
+            className: 'px-4 py-2 rounded-xl bg-[#0F3D2E] text-white text-xs font-semibold hover:bg-[#165B44]',
+            onClick: (close) => {
+              let raw = document.getElementById('fb-cfg-textarea').value.trim();
+              const err = document.getElementById('fb-cfg-err');
+              try {
+                // Allow JS object literal or JSON by normalizing unquoted keys
+                if (!raw.startsWith('{')) throw new Error('Must start with {');
+                const normalized = raw
+                  .replace(/([{,]\s*)([a-zA-Z0-9_]+)\s*:/g, '$1"$2":')
+                  .replace(/'/g, '"')
+                  .replace(/,\s*}/g, '}');
+                const parsed = JSON.parse(normalized);
+                if (!parsed.apiKey || !parsed.projectId) throw new Error('Missing apiKey or projectId');
+                safeSetLS(STORAGE_KEY_FB_CFG, JSON.stringify(parsed, null, 2));
+                close();
+                showToast('Firebase connected! Reloading...');
+                setTimeout(() => location.reload(), 600);
+              } catch (e) {
+                err.textContent = 'Invalid config: ' + e.message;
+                err.classList.remove('hidden');
+              }
+            }
+          }
+        ]
+      });
+    }
+
+    document.getElementById('open-fb-setup-login-btn').addEventListener('click', openFirebaseSetupModal);
+    document.getElementById('open-fb-setup-btn').addEventListener('click', openFirebaseSetupModal);
+
     // ==================== AUTHENTICATION ====================
     const loginScreen = document.getElementById('login-screen');
     const appShell = document.getElementById('app-shell');
     const loginForm = document.getElementById('login-form');
+    const emailInput = document.getElementById('login-email');
     const pwInput = document.getElementById('login-password');
     const loginError = document.getElementById('login-error');
 
@@ -1357,18 +1447,17 @@
       pwInput.type = pwInput.type === 'password' ? 'text' : 'password';
     });
 
-    function unlockApp() {
+    function unlockApp(isFirebase = false) {
       loginScreen.classList.add('hidden');
       appShell.classList.remove('hidden');
       appShell.classList.add('flex');
-      safeSetLS(STORAGE_KEY_AUTH, '1');
+      if (!isFirebase) safeSetLS(STORAGE_KEY_AUTH, '1');
+      updateLiveBannerUI(isFirebase);
       fetchGitMediaList(false);
-      loadSharedSlidesFromRepo();
       renderAll();
     }
 
-    function lockApp() {
-      safeSetLS(STORAGE_KEY_AUTH, '0');
+    function lockAppUI() {
       appShell.classList.add('hidden');
       appShell.classList.remove('flex');
       loginScreen.classList.remove('hidden');
@@ -1376,151 +1465,91 @@
       loginError.classList.add('hidden');
     }
 
-    loginForm.addEventListener('submit', (e) => {
+    async function lockApp() {
+      safeSetLS(STORAGE_KEY_AUTH, '0');
+      if (fbEnabled && fbAuth) {
+        try { await signOut(fbAuth); } catch (e) { }
+      }
+      lockAppUI();
+    }
+
+    loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      if (pwInput.value === getStoredPassword()) {
-        loginError.classList.add('hidden');
-        unlockApp();
+      loginError.classList.add('hidden');
+
+      if (fbEnabled && fbAuth) {
+        const email = emailInput.value.trim();
+        const pw = pwInput.value;
+        if (!email) {
+          loginError.textContent = 'Please enter your instructor email.';
+          loginError.classList.remove('hidden');
+          return;
+        }
+        try {
+          await signInWithEmailAndPassword(fbAuth, email, pw);
+        } catch (err) {
+          loginError.textContent = 'Login failed: ' + (err.code || err.message);
+          loginError.classList.remove('hidden');
+        }
       } else {
-        loginError.classList.remove('hidden');
-        pwInput.focus();
+        if (pwInput.value === getStoredPassword()) {
+          unlockApp(false);
+        } else {
+          loginError.textContent = 'Incorrect password. Please try again.';
+          loginError.classList.remove('hidden');
+          pwInput.focus();
+        }
       }
     });
 
     document.getElementById('logout-btn').addEventListener('click', lockApp);
 
     document.getElementById('change-pw-btn').addEventListener('click', () => {
-      const savedToken = safeGetLS(STORAGE_KEY_GH_TOKEN, '');
       openModal({
-        title: 'Security & GitHub Sync Settings',
+        title: 'Security & Firebase Settings',
         bodyHtml: `
           <div class="space-y-4">
             <div class="space-y-2 pb-3 border-b border-slate-200">
-              <p class="text-xs font-bold uppercase text-[#0F3D2E]">Instructor Password</p>
-              <input id="new-pw-input" type="password" placeholder="New password (leave blank to keep current)"
+              <p class="text-xs font-bold uppercase text-[#0F3D2E]">Local Mode Password</p>
+              <input id="new-pw-input" type="password" placeholder="New password (minimum 4 chars)"
                 class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#0F3D2E]" />
               <input id="confirm-pw-input" type="password" placeholder="Confirm new password"
                 class="w-full px-3 py-2 rounded-lg border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-[#0F3D2E]" />
-            </div>
-            <div class="space-y-2">
-              <p class="text-xs font-bold uppercase text-[#0F3D2E]">GitHub Token (for All-Device Sync)</p>
-              <p class="text-[11px] text-slate-500">Paste a GitHub Personal Access Token (with <code class="bg-slate-100 px-1 rounded">repo</code> permission) to save <code class="bg-slate-100 px-1 rounded">slides.json</code> directly to GitHub.</p>
-              <input id="gh-token-input" type="password" value="${escapeAttr(savedToken)}" placeholder="ghp_xxxxxxxxxxxx"
-                class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs focus:outline-none focus:ring-2 focus:ring-[#0F3D2E]" />
             </div>
             <p id="pw-modal-err" class="text-xs text-rose-600 hidden"></p>
           </div>
         `,
         actions: [
           {
-            label: 'Cancel',
-            className: 'px-4 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-slate-600 hover:bg-slate-50',
-            onClick: (close) => close()
+            label: 'Firebase Config',
+            className: 'px-3.5 py-2 rounded-xl border border-[#0F3D2E]/30 text-xs font-semibold text-[#0F3D2E] hover:bg-[#E9F2EE]',
+            onClick: (close) => { close(); openFirebaseSetupModal(); }
           },
           {
-            label: 'Save Settings',
+            label: 'Save Password',
             className: 'px-4 py-2 rounded-xl bg-[#0F3D2E] text-white text-xs font-semibold hover:bg-[#165B44]',
             onClick: (close) => {
               const p1 = document.getElementById('new-pw-input').value.trim();
               const p2 = document.getElementById('confirm-pw-input').value.trim();
-              const token = document.getElementById('gh-token-input').value.trim();
               const err = document.getElementById('pw-modal-err');
-              if (p1) {
-                if (p1.length < 4) {
-                  err.textContent = 'Password must be at least 4 characters.';
-                  err.classList.remove('hidden');
-                  return;
-                }
-                if (p1 !== p2) {
-                  err.textContent = 'Passwords do not match.';
-                  err.classList.remove('hidden');
-                  return;
-                }
-                safeSetLS(STORAGE_KEY_PW, p1);
+              if (p1.length < 4) {
+                err.textContent = 'Password must be at least 4 characters.';
+                err.classList.remove('hidden');
+                return;
               }
-              safeSetLS(STORAGE_KEY_GH_TOKEN, token);
+              if (p1 !== p2) {
+                err.textContent = 'Passwords do not match.';
+                err.classList.remove('hidden');
+                return;
+              }
+              safeSetLS(STORAGE_KEY_PW, p1);
               close();
-              showToast('Settings saved');
+              showToast('Local password updated');
             }
           }
         ]
       });
     });
-
-    // GitHub All-Device Sync Button
-    document.getElementById('sync-github-btn').addEventListener('click', async () => {
-      const token = safeGetLS(STORAGE_KEY_GH_TOKEN, '');
-      if (!token) {
-        openModal({
-          title: 'Sync Slides to All Devices',
-          bodyHtml: `
-            <div class="space-y-3 text-xs text-slate-600">
-              <p>To make your edited slides and attached videos appear on <strong>all devices</strong>, <code class="bg-slate-100 px-1 rounded">slides.json</code> needs to be saved in your GitHub repository (<code class="bg-slate-100 px-1 rounded">${GITHUB_REPO}</code>).</p>
-              <p><strong>Option 1:</strong> Paste a GitHub Personal Access Token below to save directly from here.</p>
-              <input id="quick-gh-token" type="password" placeholder="ghp_xxxxxxxxxxxx"
-                class="w-full px-3 py-2 rounded-lg border border-slate-300 text-xs focus:outline-none focus:ring-2 focus:ring-[#0F3D2E]" />
-              <p><strong>Option 2:</strong> Click <em>Download slides.json</em> in the left sidebar and upload it to your GitHub repo root.</p>
-            </div>
-          `,
-          actions: [
-            {
-              label: 'Download slides.json',
-              className: 'px-3.5 py-2 rounded-xl border border-slate-200 text-xs font-semibold text-[#0F3D2E] hover:bg-slate-50',
-              onClick: (close) => {
-                downloadSlidesJson();
-                close();
-              }
-            },
-            {
-              label: 'Save & Sync to GitHub',
-              className: 'px-4 py-2 rounded-xl bg-[#0F3D2E] text-white text-xs font-semibold hover:bg-[#165B44]',
-              onClick: async (close) => {
-                const t = document.getElementById('quick-gh-token').value.trim();
-                if (!t) {
-                  showToast('Please paste your GitHub token', 'error');
-                  return;
-                }
-                safeSetLS(STORAGE_KEY_GH_TOKEN, t);
-                close();
-                try {
-                  showToast('Syncing slides.json to GitHub...');
-                  await pushSlidesToGitHub(t);
-                  showToast('Synced! All devices will update in ~20s.');
-                } catch (err) {
-                  showToast(`Sync failed: ${err.message}`, 'error');
-                }
-              }
-            }
-          ]
-        });
-        return;
-      }
-
-      try {
-        showToast('Syncing slides.json to GitHub...');
-        await pushSlidesToGitHub(token);
-        showToast('Synced! All devices will update in ~20s.');
-      } catch (err) {
-        showToast(`Sync failed: ${err.message}`, 'error');
-      }
-    });
-
-    function downloadSlidesJson() {
-      const cleanSlides = slides.map(s => ({
-        ...s,
-        media: (s.media || []).map(m => {
-          const copy = { ...m };
-          delete copy.blobKey;
-          return copy;
-        })
-      }));
-      const blob = new Blob([JSON.stringify(cleanSlides, null, 2)], { type: 'application/json' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'slides.json';
-      a.click();
-      showToast('slides.json downloaded — upload to GitHub root');
-    }
 
     // ==================== DASHBOARD SWITCHING ====================
     const modePresentBtn = document.getElementById('mode-present-btn');
@@ -1552,7 +1581,6 @@
     modePresentBtn.addEventListener('click', () => setDashboard('present'));
     modeEditBtn.addEventListener('click', () => setDashboard('edit'));
 
-    // ==================== YOUTUBE EMBED HELPER ====================
     function extractYouTubeId(url) {
       const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([a-zA-Z0-9_-]{11})/);
       return m ? m[1] : null;
@@ -1666,7 +1694,6 @@
       content.style.fontSize = `${fontScale}rem`;
       content.innerHTML = '';
 
-      // COVER SLIDE LAYOUT
       if (s.layout === 'cover') {
         const cover = document.createElement('div');
         cover.className = 'py-10 sm:py-16 px-4 text-center rounded-2xl islamic-pattern text-white border border-[#B8924A]/40 shadow-inner';
@@ -1688,7 +1715,6 @@
       const hasPoints = s.points && s.points.length > 0;
       const useSplitLayout = hasMedia && (hasPoints || (s.arabic && s.arabic.trim()));
 
-      // Header
       const header = document.createElement('div');
       header.className = 'mb-4';
       header.innerHTML = `
@@ -1699,7 +1725,6 @@
       `;
       content.appendChild(header);
 
-      // Wrapper: 2-column side-by-side when BOTH text & video/photo exist so video never pushes off bottom!
       const bodyWrap = document.createElement('div');
       bodyWrap.className = useSplitLayout
         ? 'grid grid-cols-1 lg:grid-cols-12 gap-5 items-center'
@@ -1708,7 +1733,6 @@
       const textCol = document.createElement('div');
       textCol.className = useSplitLayout ? 'lg:col-span-5 space-y-3' : 'space-y-4';
 
-      // Arabic Block (Dua or Fiqh)
       if (s.arabic && s.arabic.trim()) {
         const arBox = document.createElement('div');
         const isDua = s.layout === 'dua';
@@ -1721,7 +1745,6 @@
         textCol.appendChild(arBox);
       }
 
-      // Points / Branches
       if (hasPoints) {
         if (s.layout === 'branches') {
           const grid = document.createElement('div');
@@ -1752,9 +1775,7 @@
         }
       }
 
-      if (textCol.children.length > 0) {
-        bodyWrap.appendChild(textCol);
-      }
+      if (textCol.children.length > 0) bodyWrap.appendChild(textCol);
 
       if (hasMedia) {
         const mediaCol = document.createElement('div');
@@ -1764,14 +1785,10 @@
       }
 
       content.appendChild(bodyWrap);
-
-      // Reset stage scroll to top when switching slides
       document.getElementById('present-stage-wrap').scrollTop = 0;
 
-      // Notes
       const notesPanel = document.getElementById('present-notes-panel');
-      const notesText = document.getElementById('present-notes-text');
-      notesText.textContent = s.notes || 'No teacher notes for this slide.';
+      document.getElementById('present-notes-text').textContent = s.notes || 'No teacher notes for this slide.';
       notesPanel.classList.toggle('hidden', !showNotes);
     }
 
@@ -1884,7 +1901,7 @@
       container.innerHTML = '';
 
       if (!s.media || s.media.length === 0) {
-        container.innerHTML = `<div class="col-span-full py-8 text-center text-xs text-[#5C6B66] border border-dashed border-[#D8D2C5] rounded-2xl bg-[#FAF8F4]">No photos or videos attached yet. Select from Git <code class="px-1 bg-white rounded">videos/</code> or upload above.</div>`;
+        container.innerHTML = `<div class="col-span-full py-8 text-center text-xs text-[#5C6B66] border border-dashed border-[#D8D2C5] rounded-2xl bg-[#FAF8F4]">No photos or videos attached yet. Upload to Firebase or select from Git <code class="px-1 bg-white rounded">videos/</code> above.</div>`;
         return;
       }
 
@@ -2117,11 +2134,53 @@
 
     document.getElementById('preview-this-slide-btn').addEventListener('click', () => setDashboard('present'));
 
-    // Media Upload Handlers (Photos & Videos saved to IndexedDB)
+    // Media Upload Handlers (Firebase Storage when connected, IndexedDB fallback otherwise)
     async function handleFileUploads(files, mediaType) {
       const s = slides[currentIndex];
-      s.media = s.media || [];
-      s.media = s.media.filter(m => m.type !== 'placeholder');
+      s.media = (s.media || []).filter(m => m.type !== 'placeholder');
+
+      if (fbEnabled && fbStorage && fbAuth?.currentUser) {
+        const progWrap = document.getElementById('upload-progress-wrap');
+        const progLabel = document.getElementById('upload-progress-label');
+        const progPct = document.getElementById('upload-progress-pct');
+        const progBar = document.getElementById('upload-progress-bar');
+
+        for (const file of files) {
+          progWrap.classList.remove('hidden');
+          progLabel.textContent = `Uploading ${file.name}...`;
+          const fileRef = storageRef(fbStorage, `mayyith_media/${Date.now()}_${file.name}`);
+          await new Promise((resolve, reject) => {
+            const task = uploadBytesResumable(fileRef, file);
+            task.on('state_changed',
+              (snap) => {
+                const pct = Math.round((snap.bytesTransferred / snap.totalBytes) * 100);
+                progPct.textContent = `${pct}%`;
+                progBar.style.width = `${pct}%`;
+              },
+              (err) => {
+                showToast('Upload failed: ' + err.message, 'error');
+                reject(err);
+              },
+              async () => {
+                const url = await getDownloadURL(task.snapshot.ref);
+                s.media.push({
+                  id: 'm_' + Date.now() + Math.random().toString(36).slice(2, 5),
+                  type: mediaType,
+                  url,
+                  caption: file.name.replace(/\.[^/.]+$/, '')
+                });
+                resolve();
+              }
+            );
+          }).catch(() => {});
+        }
+        progWrap.classList.add('hidden');
+        saveSlides();
+        renderMediaEditor();
+        renderEditList();
+        showToast('Uploaded & synced live to all devices!');
+        return;
+      }
 
       for (const file of files) {
         const blobKey = `blob_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
@@ -2136,7 +2195,7 @@
       saveSlides();
       renderMediaEditor();
       renderEditList();
-      showToast(`${files.length} ${mediaType === 'image' ? 'photo' : 'video'}(s) added`);
+      showToast(`${files.length} ${mediaType === 'image' ? 'photo' : 'video'}(s) added locally`);
     }
 
     document.getElementById('upload-photo-input').addEventListener('change', (e) => {
@@ -2159,12 +2218,7 @@
       }
       const s = slides[currentIndex];
       s.media = (s.media || []).filter(m => m.type !== 'placeholder');
-      s.media.push({
-        id: 'm_' + Date.now(),
-        type,
-        url,
-        caption
-      });
+      s.media.push({ id: 'm_' + Date.now(), type, url, caption });
       document.getElementById('url-media-input').value = '';
       document.getElementById('url-media-caption').value = '';
       saveSlides();
@@ -2174,7 +2228,14 @@
     });
 
     // Export / Import / Reset
-    document.getElementById('download-slides-json-btn').addEventListener('click', downloadSlidesJson);
+    document.getElementById('export-json-btn').addEventListener('click', () => {
+      const blob = new Blob([JSON.stringify(slides, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'mayyith_slides_backup.json';
+      a.click();
+      showToast('Backup exported');
+    });
 
     document.getElementById('import-json-input').addEventListener('change', (e) => {
       const file = e.target.files[0];
@@ -2244,8 +2305,9 @@
     }
 
     slides = loadLocalSlides();
-    if (safeGetLS(STORAGE_KEY_AUTH, '0') === '1') {
-      unlockApp();
+    initFirebaseIfConfigured();
+    if (!fbEnabled && safeGetLS(STORAGE_KEY_AUTH, '0') === '1') {
+      unlockApp(false);
     }
   </script>
 </body>
