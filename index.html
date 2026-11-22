@@ -241,6 +241,11 @@
 
       <!-- RIGHT ACTIONS -->
       <div class="flex items-center gap-2">
+        <button id="offline-cache-btn" type="button" title="Download all videos & photos for offline class"
+          class="px-2.5 sm:px-3 py-1.5 rounded-xl bg-[#E9F2EE] hover:bg-[#D5E8DF] text-[#0F3D2E] text-xs font-semibold transition flex items-center gap-1.5 border border-[#0F3D2E]/15">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          <span id="offline-btn-label" class="hidden md:inline">Offline Cache</span>
+        </button>
         <button id="change-pw-btn" type="button" title="Firebase & Security Settings"
           class="p-2 rounded-xl text-[#5C6B66] hover:text-[#0F3D2E] hover:bg-[#F3EFE6] transition">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1278,7 +1283,17 @@
 
     const objectUrlCache = new Map();
     async function resolveMediaSrc(mediaItem) {
-      if (mediaItem.url) return mediaItem.url;
+      if (mediaItem.url) {
+        const cacheKey = 'offline_cache_' + mediaItem.url;
+        if (objectUrlCache.has(cacheKey)) return objectUrlCache.get(cacheKey);
+        const cachedBlob = await getMediaBlob(cacheKey);
+        if (cachedBlob) {
+          const objUrl = URL.createObjectURL(cachedBlob);
+          objectUrlCache.set(cacheKey, objUrl);
+          return objUrl;
+        }
+        return mediaItem.url;
+      }
       if (!mediaItem.blobKey) return '';
       if (objectUrlCache.has(mediaItem.blobKey)) return objectUrlCache.get(mediaItem.blobKey);
       const blob = await getMediaBlob(mediaItem.blobKey);
@@ -1286,6 +1301,134 @@
       const url = URL.createObjectURL(blob);
       objectUrlCache.set(mediaItem.blobKey, url);
       return url;
+    }
+
+    function getCacheableUrls() {
+      const urls = new Set();
+      slides.forEach(s => {
+        (s.media || []).forEach(m => {
+          if (m.url && (m.type === 'video' || m.type === 'image') && !extractYouTubeId(m.url)) {
+            urls.add(m.url);
+          }
+        });
+      });
+      return Array.from(urls);
+    }
+
+    async function updateOfflineBadge() {
+      const label = document.getElementById('offline-btn-label');
+      const btn = document.getElementById('offline-cache-btn');
+      if (!label || !btn) return;
+      const urls = getCacheableUrls();
+      if (urls.length === 0) {
+        label.textContent = 'Offline Cache';
+        return;
+      }
+      let cachedCount = 0;
+      for (const u of urls) {
+        const b = await getMediaBlob('offline_cache_' + u);
+        if (b) cachedCount++;
+      }
+      if (cachedCount === urls.length) {
+        label.textContent = `Offline Ready (${cachedCount}/${urls.length})`;
+        btn.className = 'px-2.5 sm:px-3 py-1.5 rounded-xl bg-[#0F3D2E] text-[#E8D2A6] text-xs font-semibold transition flex items-center gap-1.5 shadow-sm';
+      } else {
+        label.textContent = `Cache Offline (${cachedCount}/${urls.length})`;
+        btn.className = 'px-2.5 sm:px-3 py-1.5 rounded-xl bg-[#E9F2EE] hover:bg-[#D5E8DF] text-[#0F3D2E] text-xs font-semibold transition flex items-center gap-1.5 border border-[#0F3D2E]/15';
+      }
+    }
+
+    async function openOfflineCacheModal() {
+      const urls = getCacheableUrls();
+      let cachedCount = 0;
+      for (const u of urls) {
+        if (await getMediaBlob('offline_cache_' + u)) cachedCount++;
+      }
+
+      openModal({
+        title: 'Offline Class Cache (Zero-Lag Playback)',
+        bodyHtml: `
+          <div class="space-y-3 text-xs text-slate-600">
+            <p>Download all <strong>${urls.length}</strong> videos &amp; photos into this browser so they play <strong>instantly without internet or buffering</strong> during class.</p>
+            <div class="p-3 rounded-xl bg-[#FAF8F4] border border-[#E5E0D5] flex items-center justify-between">
+              <span>Cached on this device:</span>
+              <strong id="off-status-count" class="text-[#0F3D2E]">${cachedCount} / ${urls.length} files</strong>
+            </div>
+            <div id="off-prog-wrap" class="hidden space-y-1.5">
+              <div class="flex justify-between text-[11px] font-semibold text-[#0F3D2E]">
+                <span id="off-prog-text">Starting...</span>
+                <span id="off-prog-pct">0%</span>
+              </div>
+              <div class="w-full h-2 bg-slate-200 rounded-full overflow-hidden">
+                <div id="off-prog-bar" class="h-full bg-[#0F3D2E] transition-all" style="width:0%"></div>
+              </div>
+            </div>
+          </div>
+        `,
+        actions: [
+          {
+            label: 'Clear Cache',
+            className: 'px-3 py-2 rounded-xl border border-rose-200 text-xs font-semibold text-rose-700 hover:bg-rose-50',
+            onClick: async (close) => {
+              for (const u of urls) {
+                const k = 'offline_cache_' + u;
+                await deleteMediaBlob(k);
+                objectUrlCache.delete(k);
+              }
+              await updateOfflineBadge();
+              close();
+              showToast('Offline cache cleared');
+            }
+          },
+          {
+            label: 'Download All Now',
+            className: 'px-4 py-2 rounded-xl bg-[#0F3D2E] text-white text-xs font-semibold hover:bg-[#165B44]',
+            onClick: async (close) => {
+              const progWrap = document.getElementById('off-prog-wrap');
+              const progText = document.getElementById('off-prog-text');
+              const progPct = document.getElementById('off-prog-pct');
+              const progBar = document.getElementById('off-prog-bar');
+              const statusCount = document.getElementById('off-status-count');
+              progWrap.classList.remove('hidden');
+
+              let done = 0;
+              let failed = 0;
+              for (let i = 0; i < urls.length; i++) {
+                const u = urls[i];
+                const k = 'offline_cache_' + u;
+                progText.textContent = `Caching ${i + 1}/${urls.length}: ${u.split('/').pop()}`;
+                const existing = await getMediaBlob(k);
+                if (!existing) {
+                  try {
+                    const res = await fetch(u);
+                    if (!res.ok) throw new Error('HTTP ' + res.status);
+                    const blob = await res.blob();
+                    await saveMediaBlob(k, blob);
+                    done++;
+                  } catch (e) {
+                    failed++;
+                  }
+                } else {
+                  done++;
+                }
+                const pct = Math.round(((i + 1) / urls.length) * 100);
+                progPct.textContent = `${pct}%`;
+                progBar.style.width = `${pct}%`;
+                statusCount.textContent = `${done} / ${urls.length} files`;
+              }
+
+              await updateOfflineBadge();
+              renderAll();
+              close();
+              if (failed > 0) {
+                showToast(`Cached ${done} files (${failed} skipped/unavailable)`, 'error');
+              } else {
+                showToast(`All ${done} files cached for offline class!`);
+              }
+            }
+          }
+        ]
+      });
     }
 
     // ==================== APPLICATION STATE ====================
@@ -1477,7 +1620,7 @@
       e.preventDefault();
       loginError.classList.add('hidden');
 
-      if (fbEnabled && fbAuth) {
+      if (fbEnabled && fbAuth && navigator.onLine) {
         const email = emailInput.value.trim();
         const pw = pwInput.value;
         if (!email) {
@@ -2300,8 +2443,11 @@
       return escapeHtml(str).replace(/'/g, '&#39;');
     }
 
+    document.getElementById('offline-cache-btn').addEventListener('click', openOfflineCacheModal);
+
     function renderAll() {
       setDashboard(activeDashboard);
+      updateOfflineBadge();
     }
 
     slides = loadLocalSlides();
